@@ -2,27 +2,19 @@ const multer = require("multer");
 const shortid = require("shortid");
 
 const storage = multer.diskStorage({
-  destination: (req, File, cb) => {
+  destination: (req, file, cb) => {
     cb(null, "./Public/media/profiles");
   },
 
   filename: (req, file, cb) => {
-    const uqSuffix = shortid.generate();
-    const uniqueSuffix = Date.now();
+    const uq = shortid.generate();
+    const date = Date.now();
 
-    cb(
-      null,
-      file.fieldname +
-        "_" +
-        uqSuffix +
-        "_" +
-        uniqueSuffix +
-        "_" +
-        file.originalname
-    );
+    cb(null, file.fieldname + "_" + uq + "_" + date + "_" + file.originalname);
   },
 });
 
-const profileUpload = multer({ storage });
 
-module.exports = profileUpload
+const uploadProfile = multer({storage})
+
+module.exports = uploadProfile

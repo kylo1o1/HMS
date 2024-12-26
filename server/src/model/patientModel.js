@@ -8,14 +8,13 @@ const patientSchema = new mongoose.Schema({
   },
   insuranceDetails: {
     provider: {
-      String,
+      type: String,
     },
     policyNumber: {
-      String,
+      type: String,
     },
-    validUntil: {
-      Date,
-    },
+    validUntil :  String,
+    
   },
 
   emergencyContact: {
@@ -29,7 +28,6 @@ const patientSchema = new mongoose.Schema({
       type: String,
     },
   },
-  
 });
 
 const Patient = mongoose.model("Patient", patientSchema);

@@ -8,15 +8,15 @@ dataBaseConnection();
 
 app.use((err,req,res,next)=>{
   if(err){
-
     console.error(err.message);
-    
 
     return res.status(500).json({
       success:false,
-      message:err.message
+      message:err.message,
+      stack:err.stack
     })
   }
+  
 })
 
 app.listen(process.env.PORT, () => {

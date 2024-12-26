@@ -36,8 +36,10 @@ const authentication =  (req, res, next) => {
 };
 
 const authoriazation =  (...authRoles) => {
+  
   return (req, res, next) => {
     const { role } = req;
+
 
     if (!authRoles.includes(role)) {
       return res.status(403).json({
