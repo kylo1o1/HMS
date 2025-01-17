@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const { validateRequest } = require("../util/validateRequest");
 const { hashPassword } = require("../util/hashPassword");
 const { unsyncImage } = require("../util/syncUnsyncImages");
+const Patient = require("../model/patientModel");
+const { default: mongoose } = require("mongoose");
 
 exports.addAdmin = async (req, res) => {
   const { email, password, name, dateOfBirth, gender, contact } = req.body;
@@ -11,7 +13,7 @@ exports.addAdmin = async (req, res) => {
   try {
     const role = "Admin";
 
-    const requiredFields = ''
+    const requiredFields = "";
     const validateError = validateRequest(requiredFields, req.body);
 
     if (validateError) {
@@ -69,6 +71,10 @@ exports.addDoctor = async (req, res) => {
     ...additionalFields
   } = req.body;
 
+  const session = await mongoose.startSession();
+
+  session.startTransaction();
+
   try {
     const role = "Doctor";
 
@@ -77,8 +83,6 @@ exports.addDoctor = async (req, res) => {
       "qualification",
       "department",
       "experience",
-      "schedule",
-      "appointmentCharges",
     ];
 
     const validateError = validateRequest(requiredFields, req.body);
@@ -132,6 +136,8 @@ exports.addDoctor = async (req, res) => {
     }
     await doctor.save();
 
+    session.commitTransaction();
+
     return res.status(201).json({
       success: true,
       message: "Doctor registered",
@@ -141,10 +147,67 @@ exports.addDoctor = async (req, res) => {
       unsyncImage(req.file.path);
     }
 
+    session.abortTransaction();
+
     console.error("Doctor registration error", error.message);
     return res.status(500).json({
       success: false,
       message: "Doctor registration Error",
+      error: error.message,
+    });
+  } finally {
+    session.endSession();
+  }
+};
+
+exports.addPharmacist = async (req, res) => {
+  const { email, password, name, dateOfBirth, gender, contact } = req.body;
+
+  try {
+    const role = "Pharmacist";
+
+    const requiredFields = "";
+    const validateError = validateRequest(requiredFields, req.body);
+
+    if (validateError) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter all fields",
+        error: validateError,
+      });
+    }
+
+    const exUser = await User.findOne({ email });
+
+    if (exUser) {
+      return res.status(400).json({
+        success: false,
+        message: `${role} with this email already Exist!!`,
+      });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      dateOfBirth,
+      gender,
+      role,
+      contact,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Pharmacist registered",
+    });
+  } catch (error) {
+    console.error(`Pharmacist registration error`, error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: `Admin registration Failed`,
       error: error.message,
     });
   }
@@ -239,3 +302,113 @@ exports.deleteAdmin = async (req, res) => {
     });
   }
 };
+
+exports.viewDoctors = async (req, res) => {
+  try {
+    const doctors = await Doctor.find().populate("userId", "-password");
+
+    if (!doctors) {
+      return res.status(404).json({
+        success: false,
+        message: "No Doctors Foud",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      doctors,
+    });
+  } catch (error) {
+    console.error("Error Fetching Doctors :", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Fetching Doctor Error",
+      error: error.message,
+    });
+  }
+};
+
+exports.viewPatients = async (req, res) => {
+  try {
+    const patients = await Patient.find().populate("userId", "-password");
+
+    if (!patients || patients.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No Patients Found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      patients,
+    });
+  } catch (error) {
+    console.error("Error Fetching Patients :", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Fetching Patients Error",
+      error: error.message,
+    });
+  }
+};
+
+exports.viewSinglePatient = async (req, res) => {
+  try {
+    const patId = req.params.id;
+
+    console.log(req.params);
+
+    const patient = await Patient.findById(patId).populate(
+      "userId",
+      "-password"
+    );
+
+    if (!patient) {
+      return res.status(404).json({
+        success: false,
+        message: "No Patient Found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      patient,
+    });
+  } catch (error) {
+    console.error("Error Fetching Patient Details :", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Fetching Patients Details Error",
+      error: error.message,
+    });
+  }
+};
+
+exports.viewSingleDoctor = async (req, res) => {
+  try {
+    const docId = req.params.id;
+
+    const doctor = await Doctor.findById(docId).populate("userId", "-password");
+
+    if (!doctor) {
+      return res.status(404).json({
+        success: false,
+        message: "No Doctor Found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      doctor,
+    });
+  } catch (error) {
+    console.error("Error Fetching Doctor Details :", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Fetching Doctor Details Error",
+      error: error.message,
+    });
+  }
+};
+

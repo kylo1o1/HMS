@@ -7,6 +7,8 @@ exports.generateToken = async (req,res) => {
         
         const {id,role} = req.user
 
+        
+
         const options = {
             id,
             role,

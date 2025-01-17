@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const authentication =  (req, res, next) => {
+const authentication = (req, res, next) => {
   try {
     const { token } = req.cookies;
 
@@ -35,11 +35,9 @@ const authentication =  (req, res, next) => {
   }
 };
 
-const authoriazation =  (...authRoles) => {
-  
+const authorization = (...authRoles) => {
   return (req, res, next) => {
     const { role } = req;
-
 
     if (!authRoles.includes(role)) {
       return res.status(403).json({
@@ -53,5 +51,5 @@ const authoriazation =  (...authRoles) => {
 
 module.exports = {
   authentication,
-  authoriazation
+  authorization,
 };

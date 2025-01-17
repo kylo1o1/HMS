@@ -8,42 +8,50 @@ const docSchema = new mongoose.Schema({
   },
 
   speciality: {
-    type:String,
+    type: String,
     required: true,
   },
 
   qualification: {
-    type:   [String],
+    type: [String],
   },
 
   department: {
-    type:String,
+    type: String,
     required: true,
   },
 
   experience: {
-    type:String,
+    type: Number,
     required: true,
   },
 
-  schedule: {
-    days: [{
-      type: String,
-    }],
-    startsAt: {
-      type: String,
+  availableSlots: [
+    {
+     day:{
+      type:String,
+      required:true,
+
+     },
+     hours:{
+      type:String,
+      required:true,
+     }
     },
-    endsAt: {
-      type: String,
-    },
-  },
+  ],
 
   docPicture: {
     type: String,
   },
 
+  doctorType: {
+    type: String,
+    enum: ["Specialist", "General"],
+  },
+
   appointmentCharges: {
     type: String,
+    required: true,
   },
 });
 

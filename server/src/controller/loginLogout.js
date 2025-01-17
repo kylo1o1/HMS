@@ -48,3 +48,21 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+exports.logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+
+    return res.status(200).json({
+      success: true,
+      message: "User Logged Out successfull",
+    });
+  } catch (error) {
+    console.error("Logout Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Logout Error",
+      error: error.message,
+    });
+  }
+};

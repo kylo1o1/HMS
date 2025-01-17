@@ -6,6 +6,9 @@ const patientSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  medicalHistory:{
+    type:String,
+  },
   insuranceDetails: {
     provider: {
       type: String,
@@ -28,6 +31,7 @@ const patientSchema = new mongoose.Schema({
       type: String,
     },
   },
+ 
 });
 
 const Patient = mongoose.model("Patient", patientSchema);
