@@ -1,6 +1,11 @@
 const { default: mongoose, Types } = require("mongoose");
 
 const schema = new mongoose.Schema({
+  patientId: {
+    type: Types.ObjectId,
+    ref: "Patient",
+    required: true,
+  },
   appointmentId: {
     type: Types.ObjectId,
     ref: "Appointment",
@@ -34,7 +39,6 @@ const schema = new mongoose.Schema({
   diagnosis: {
     type: String,
   },
-
 
   prescriptions: [
     {

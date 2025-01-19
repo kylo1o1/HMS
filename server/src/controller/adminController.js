@@ -6,6 +6,8 @@ const { hashPassword } = require("../util/hashPassword");
 const { unsyncImage } = require("../util/syncUnsyncImages");
 const Patient = require("../model/patientModel");
 const { default: mongoose } = require("mongoose");
+const { sendLoginInfo } = require("../libs/emailSevices");
+
 
 exports.addAdmin = async (req, res) => {
   const { email, password, name, dateOfBirth, gender, contact } = req.body;
@@ -61,19 +63,13 @@ exports.addAdmin = async (req, res) => {
 };
 
 exports.addDoctor = async (req, res) => {
-  const {
-    email,
-    password,
-    name,
-    dateOfBirth,
-    gender,
-    contact,
-    ...additionalFields
-  } = req.body;
+  const { email, name, dateOfBirth, gender, contact, ...additionalFields } =
+    req.body;
 
   const session = await mongoose.startSession();
 
   session.startTransaction();
+  const password = Math.random().toString(36).slice(-8);
 
   try {
     const role = "Doctor";
@@ -136,7 +132,9 @@ exports.addDoctor = async (req, res) => {
     }
     await doctor.save();
 
+
     session.commitTransaction();
+    await sendLoginInfo(email, password);
 
     return res.status(201).json({
       success: true,
@@ -411,4 +409,3 @@ exports.viewSingleDoctor = async (req, res) => {
     });
   }
 };
-

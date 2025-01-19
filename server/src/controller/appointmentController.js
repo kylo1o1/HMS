@@ -3,13 +3,26 @@ const Appointments = require("../model/appointmentModel");
 const Doctor = require("../model/doctorModel");
 const Patient = require("../model/patientModel");
 const { checkAvailability } = require("../util/appoinmentUtils");
+const sendConfirmation = require("../libs/emailSevices");
+const User = require("../model/userModel");
 
 exports.createAppointment = async (req, res) => {
   try {
     const { date, doctorId, reason } = req.body;
 
     const userId = req.id;
-    const doctor = await Doctor.findById(doctorId);
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not Found",
+      });
+    }
+
+    const email = user.email;
+
+    const doctor = await Doctor.findById(doctorId).populate("userId");
     const patient = await Patient.findOne({ userId });
 
     if (!doctor) {
@@ -17,6 +30,19 @@ exports.createAppointment = async (req, res) => {
         success: false,
         message: "No Doctor  Found",
       });
+    }
+
+    const exists = await Appointments.findOne({
+      patientId: patient._id,
+      date: date,
+      doctorId: doctorId,
+    });
+
+    if(exists){
+      return res.status(400).json({
+        success:false,
+        message:"Appointment exists"
+      })
     }
 
     const isAvailable = checkAvailability(date, doctor.availableSlots);
@@ -49,6 +75,8 @@ exports.createAppointment = async (req, res) => {
 
     appointment.fee = doctor.appointmentCharges;
     await appointment.save();
+
+    await sendConfirmation(email, doctor.userId.name, date);
 
     return res.status(201).json({
       success: true,
@@ -155,10 +183,7 @@ exports.viewSingleAppointment = async (req, res) => {
       },
     };
 
-    
     console.log(await Appointments.find().populate("diagnosisId"));
-    
-    
 
     if (role === "Admin") {
       appointment = await Appointments.findById(aId)
@@ -170,8 +195,10 @@ exports.viewSingleAppointment = async (req, res) => {
         .populate(doctorPopulate)
         .populate("diagnosisId");
     } else if (role === "Doctor") {
-      appointment = await Appointments.findById(aId)
-        .populate(patientPopulate,"diagnosis")
+      appointment = await Appointments.findById(aId).populate(
+        patientPopulate,
+        "diagnosis"
+      );
     } else {
       return res.status(403).json({
         success: false,

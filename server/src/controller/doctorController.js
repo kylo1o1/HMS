@@ -4,6 +4,7 @@ const User = require("../model/userModel");
 const { unsyncImage } = require("../util/syncUnsyncImages");
 const Diagnosis = require("../model/diagnosisModel");
 const Appointments = require("../model/appointmentModel");
+const { hashPassword } = require("../util/hashPassword");
 
 const getUserAndDoctor = async (userId) => {
   const user = await User.findById(userId);
@@ -87,6 +88,45 @@ exports.updateDoctor = async (req, res) => {
   }
 };
 
+exports.updatePassword = async (req, res) => {
+  try {
+    const userId = req.id;
+
+
+    const doctor = await User.findOne({ _id: userId, role: "Doctor" });
+    if (!doctor) {
+      return res.status(404).json({
+        success: false,
+        message: "No Doctor Found",
+      });
+    }
+
+    const { password } = req.body;
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "fill the form",
+      });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
+    await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+    return res.status(200).json({
+      success: true,
+      message: "Password Has been updated",
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed To update Password",
+      error: error.message,
+    });
+  }
+};
+
 exports.deleteDoctor = async (req, res) => {
   try {
     const userId = req.id;
@@ -165,7 +205,7 @@ exports.addDiagnosisAndPrescription = async (req, res) => {
     });
 
     appointment.diagnosisId = diagnosisReport._id;
-
+    appointment.status = "Completed";
     await appointment.save();
 
     session.commitTransaction();

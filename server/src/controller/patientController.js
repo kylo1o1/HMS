@@ -5,6 +5,7 @@ const { validateRequest } = require("../util/validateRequest");
 const Doctor = require("../model/doctorModel");
 const Appointments = require("../model/appointmentModel");
 const { default: mongoose } = require("mongoose");
+const Diagnosis = require("../model/diagnosisModel");
 
 const getUserAndPatient = async (userId) => {
   const user = await User.findById(userId);
@@ -127,10 +128,6 @@ exports.viewPatientProfile = async (req, res) => {
 };
 
 exports.updatePatientProfile = async (req, res) => {
-
-
-  
-
   try {
     const userId = req.id;
 
@@ -180,6 +177,9 @@ exports.updatePatientProfile = async (req, res) => {
 };
 
 exports.deletePatient = async (req, res) => {
+  const session = await mongoose.startSession();
+
+  session.startTransaction();
   try {
     const userId = req.id;
 
@@ -197,11 +197,15 @@ exports.deletePatient = async (req, res) => {
     await Patient.findOneAndDelete({ userId });
     await User.findByIdAndDelete(userId);
 
+    session.commitTransaction();
+    session.endSession();
     return res.status(200).json({
       success: true,
       message: "Patient Deleted",
     });
   } catch (error) {
+    session.abortTransaction();
+    session.endSession();
     console.error("Patient Deletion Error:", error.message);
 
     return res.status(500).json({
