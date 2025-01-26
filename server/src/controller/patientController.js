@@ -35,7 +35,9 @@ exports.addPatient = async (req, res) => {
       ...additionalFields
     } = body;
 
-    const requiredFields = ["insuranceDetails", "emergencyContact"];
+    // const requiredFields = ["insuranceDetails", "emergencyContact"];
+
+    const requiredFields = ""
 
     const validationError = validateRequest(requiredFields, body);
 
