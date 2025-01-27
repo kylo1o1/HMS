@@ -77,14 +77,12 @@ const Register = () => {
         });    }
   };
 
-  // Registration form UI
   return (
-    <Container fluid className="outer-container">
       <Container className="form-wrapper">
         <Row className="justify-content-center align-items-center w-100">
-          <Col md={5}>
+          <Col md={6}>
             <div className="register-box">
-              <h2 className="text-center mb-3">Registration</h2>
+              <h2 className="text-center mb-3"> Patient Registration</h2>
               <Formik
                 initialValues={{
                   name: "",
@@ -110,7 +108,7 @@ const Register = () => {
                         onChange={handleChange}
                         isInvalid={touched.name && !!errors.name}
                       />
-                      <ErrorMessage name="name" component="p" className="text-danger mb-0 " />
+                      {/* <ErrorMessage name="name" component="p" className="text-danger mb-0 " /> */}
                     </FormGroup>
                     <FormGroup as={Col} className="mb-3">
                       <FormLabel>Email</FormLabel>
@@ -121,7 +119,7 @@ const Register = () => {
                         onChange={handleChange}
                         isInvalid={touched.email && !!errors.email}
                       />
-                      <ErrorMessage name="email" component="p" className="text-danger mb-0 " />
+                      {/* <ErrorMessage name="email" component="p" className="text-danger mb-0 " /> */}
                     </FormGroup>
                    </Row>
 
@@ -136,10 +134,10 @@ const Register = () => {
                         onChange={handleChange}
                         isInvalid={touched.phone && !!errors.phone}
                       />
-                      <ErrorMessage name="phone" component="p" className="text-danger mb-0 " />
+                      {/* <ErrorMessage name="phone" component="p" className="text-danger mb-0 " /> */}
                     </FormGroup>
 
-                    <FormGroup as={Col} className="mb-3">
+                    <FormGroup as={Col} className="mb-3 ">
                       <FormLabel>Date of Birth</FormLabel>
                       <FormControl
                         type="date"
@@ -148,7 +146,7 @@ const Register = () => {
                         onChange={handleChange}
                         isInvalid={touched.dateOfBirth && !!errors.dateOfBirth}
                       />
-                      <ErrorMessage name="dateOfBirth" component="p" className="text-danger mb-0 " />
+                      {/* <ErrorMessage name="dateOfBirth" component="p" className="text-danger mb-0  " /> */}
                     </FormGroup>
                     </Row>
                     <Row>
@@ -172,7 +170,7 @@ const Register = () => {
                           
                         ))}
                       </div>
-                      <ErrorMessage name="gender" component="p" className="text-danger mb-0 " />
+                      {/* <ErrorMessage name="gender" component="p" className="text-danger mb-0 " /> */}
                     </FormGroup>
                     </Row>
 
@@ -186,7 +184,7 @@ const Register = () => {
                         onChange={handleChange}
                         isInvalid={touched.address && !!errors.address}
                       />
-                      <ErrorMessage name="address" component="p" className="text-danger mb-0 " />
+                      {/* <ErrorMessage name="address" component="p" className="text-danger mb-0 " /> */}
                     </FormGroup>
 
                     <FormGroup className="mb-3">
@@ -198,16 +196,16 @@ const Register = () => {
                         onChange={handleChange}
                         isInvalid={touched.password && !!errors.password}
                       />
-                      <ErrorMessage name="password" component="p" className="text-danger mb-0 " />
+                      {/* <ErrorMessage name="password" component="p" className="text-danger mb-0 " /> */}
                     </FormGroup>
 
-                    <div className="d-grid gap-2">
-                      <Button variant="primary" type="submit" disabled={isSubmitting}>
+                    <div className="d-grid gap-2 justify-content-center">
+                      <Button variant="primary" type="submit" className="reg-btn" disabled={isSubmitting}>
                         Register
                       </Button>
                     </div>
                     <div className="text-center mt-3">
-                      <Link to={'/login'} className="d-block">
+                      <Link to={'/login'} className="d-block reg-link">
                         Have An Account? Log In
                       </Link> 
                     </div>
@@ -218,7 +216,6 @@ const Register = () => {
           </Col>
         </Row>
       </Container>
-    </Container>
   );
 };
 

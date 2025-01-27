@@ -1,0 +1,27 @@
+
+.container{
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.foot-links h5{
+    font-weight: 700;
+    font-size: 18px;
+}
+.foot-links ul {
+    list-style: none;
+    padding-left: 0px;
+}
+.foot-links ul li{
+    color: grey;
+}
+.foot-links ul li:hover{
+    color: black;
+}
+.foot-icon{
+    margin-right: 5px;
+}
+.brand-name{
+    font-size: 70px;
+    text-align: right;
+    text-transform: lowercase   ;   
+}
