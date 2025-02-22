@@ -1,27 +1,60 @@
+.footer {
+  background-color: #333;
+}
 
-.container{
-    margin-left: 50px;
-    margin-right: 50px;
+.foot-links h5 {
+  font-weight: 700;
+  font-size: 18px;
 }
-.foot-links h5{
-    font-weight: 700;
-    font-size: 18px;
-}
+
 .foot-links ul {
-    list-style: none;
-    padding-left: 0px;
+  list-style: none;
+  padding-left: 0;
 }
-.foot-links ul li{
-    color: grey;
+
+.foot-links ul li {
+  color: grey;
 }
-.foot-links ul li:hover{
-    color: black;
+
+.foot-links ul li a {
+  text-decoration: none;
+  color: grey;
+  transition: color 0.3s ease;
 }
-.foot-icon{
-    margin-right: 5px;
+
+.foot-links ul li a:hover {
+  color: white;
 }
-.brand-name{
-    font-size: 70px;
-    text-align: right;
-    text-transform: lowercase   ;   
+
+.foot-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.foot-icon {
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.foot-icon:hover {
+  color: #ffbb00;
+}
+
+.brand-name {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: right;
+  text-transform: lowercase;
+}
+
+@media (max-width: 768px) {
+  .brand-name {
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .foot-icons {
+    justify-content: center;
+  }
 }

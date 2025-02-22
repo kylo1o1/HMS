@@ -1,16 +1,29 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, BrowserRouter as Router, Routes} from 'react-router-dom'
-import LoginPage from "./Pages/login_SIgnUp/LoginPage";
-import Register from "./Pages/login_SIgnUp/Register";
 import { Bounce, ToastContainer } from "react-toastify";
-import Header from "./Components/Header";
-import Wrapper from "./Pages/login_SIgnUp/Wrapper";
+import "./App.css"
 import Footer from "./Components/Footer";
-import HomePage from "./Pages/home_page/HomePage";
+import LandingPage from "./Pages/LandingPage";
+import Register from "./Pages/Auth/Register";
+import Login from "./Pages/Auth/Login";
+import Header from "./Components/Header";
+import DoctorsList from "./Components/DoctorList";
+import DoctorDetails from "./Components/DoctorDetails";
+import { useSelector } from "react-redux";
+import Auth from "./Utils/Auth";
+import { useEffect } from "react";
+import AdminDashboard from "./Pages/Admin/AdminDashboard";
+import RoleBasedRoute from "./Utils/RoleBasedRoute";
+import AddDoctor from "./Components/AdminComponents/AddDoctor";
+import DoctorListFrAdmin from "./Components/AdminComponents/DoctorListFrAdmin";
 function App() {
+
+  const {isAuthenticated} = useSelector((state)=> (state?.auth?? false))
 
   return (
     <Router>
+          <Header/>
+
        <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -24,12 +37,26 @@ function App() {
         theme="light"
         transition={Bounce}
         />
-        <Header/>
       <Routes>
-        <Route path="/" element={<HomePage/>}/>
-        <Route path="/login" element={<Wrapper><LoginPage/></Wrapper>}/>
-        <Route path="/register" element={<Wrapper><Register/></Wrapper>}/>
-      </Routes>
+        <Route path="/" element={<LandingPage/>}/>
+        <Route path="/register" element={<Register/>}/>  
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/doctorList" element={<Auth isAuthenticated={isAuthenticated} ><DoctorsList/></Auth>}/>
+        <Route path="/doctorList/:id" element={<DoctorDetails/>}/>
+        {/* <Route 
+              path="/adminPanel" 
+              element={<Auth isAuthenticated={isAuthenticated}>
+                        <RoleBasedRoute allowedRoles={["Admin"]}>
+                          <AdminDashboard/>
+                        </RoleBasedRoute>
+                      </Auth>}/>
+         */}
+        <Route path="/adminPanel" element={<AdminDashboard/>}>
+          <Route path="add-doctor" element={<AddDoctor/>}/>
+          <Route path="doctor-list" element={<DoctorListFrAdmin/>}/>
+          
+        </Route>
+        </Routes>
       <Footer/>
     </Router>
   )

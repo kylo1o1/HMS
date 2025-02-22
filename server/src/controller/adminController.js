@@ -63,7 +63,7 @@ exports.addAdmin = async (req, res) => {
 };
 
 exports.addDoctor = async (req, res) => {
-  const { email, name, dateOfBirth, gender, contact, ...additionalFields } =
+  const { email, name, gender, contact, ...additionalFields } =
     req.body;
 
   const session = await mongoose.startSession();
@@ -79,6 +79,7 @@ exports.addDoctor = async (req, res) => {
       "qualification",
       "department",
       "experience",
+      "about"
     ];
 
     const validateError = validateRequest(requiredFields, req.body);

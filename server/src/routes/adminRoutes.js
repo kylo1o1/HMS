@@ -44,7 +44,7 @@ adminRouter
 
 adminRouter
   .route("/view-doctors")
-  .get(authentication, authorization("Admin"), viewDoctors);
+  .get(authentication, viewDoctors);
 
 adminRouter
   .route("/view-patients")
@@ -56,7 +56,7 @@ adminRouter
 
 adminRouter
   .route("/view-doctors/:id")
-  .get(authentication, authorization("Admin", "Doctor"), viewSingleDoctor);
+  .get(authentication, viewSingleDoctor);
 
 
 module.exports = adminRouter;

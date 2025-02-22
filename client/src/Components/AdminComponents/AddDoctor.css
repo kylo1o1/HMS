@@ -1,0 +1,46 @@
+
+
+.add
+.add-doc-title{
+    font-size: 1.125rem;
+    color: black;
+    font-weight: 500;
+}
+.add-doc-form-wrapper{
+    background-color: white;
+    max-width: 56rem;
+    max-height: 80vh;
+    overflow-y: scroll;
+}
+.add-doc-image{
+    display: flex;
+    align-items: center;
+}
+.add-doc-image img{
+    width: 64px;
+    height: 64px;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+}
+.add-doc-image label{
+    cursor: pointer;
+}
+.add-doc-image p{
+    font-size: medium;
+}
+.add-doc-form-wrapper .form-control{
+    padding-left: .75rem;
+    padding-right: .75rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border: 1px solid rgb(229, 231, 235);
+}
+.add-doc-form-wrapper .form-control:focus{
+
+    box-shadow: none;
+}
+
+.other-fields p{
+    font-size: large;
+    margin-bottom: 0px;
+}

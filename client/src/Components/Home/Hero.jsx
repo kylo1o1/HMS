@@ -1,39 +1,36 @@
 import React from "react";
-import { Button, Col, Container, Image, Row } from "react-bootstrap";
-import './Home.css'
+import { Col, Container, Image, Row } from "react-bootstrap";
 const Hero = () => {
   return (
-    <Container  fluid className="hero-container d-flex">
-        <div className="hero-container-2  ">
-          <Row className="hero-container-2-row">
-            <Col md={5} className="hero-content-text d-flex ">
-                
-                <div className="hero-title  ">
+    <Container className="hero-container d-flex align-items-center mx-auto justify-content-center">
+      <div className="hero-container-2 rounded-5">
+        <Row className="hero-container-2-row align-items-center">
+          <Col md={6} lg={5} className="hero-content-text pb-5">
+            <div className="hero-title">
+              <h1 className="hero-heading">
+                Book Appointment <br /> 
+                <span className="hero-heading-highlight">With Trusted Doctors</span>
+              </h1>
+              <p className="hero-subheading">
+                Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.
+              </p>
+              <button className="hero-book-appointment-btn">
+                Book Appointment →
+              </button>
+            </div>
+          </Col>
 
-                  <div className="hot-tag">
-                  <p className="hero-text-hot-tag">#1 Best medical Center</p>
-                  </div>
-
-                  <p className="hero-text-main">
-                    The <span className="main-text-highlight">Best Medical </span>  and Treatment  Center For You
-                  </p>
-                  <p className="hero-text-bottom">Connect with our professional doctors who are ready to help you manage <br /> your help you manage your health with expertise and dedication</p>
-
-                  <div className="hero-book-appointment">
-                    <span>                      Book An Appointment
-                    </span>
-                  </div>
-                </div>
-
-                
-            </Col>
-            <Col className=""> 
-              <div className="w-100 ">
-                <Image className="w-100" src="/media/very-good-smiling-confident-asian-female-doctor-showing-okay-ok-sign-approval-confirm-smth-saying.png" alt="asian-hero-doctor" />
-              </div>
-            </Col>
-          </Row>
-        </div>
+          <Col md={6} lg={7} className="hero-image-col">
+            <Image
+              className="hero-doctors-image"
+              src="/media/header_img.png"
+              alt="Group of doctors"
+              loading="lazy"
+            />
+          </Col>
+        </Row>
+        
+      </div>
     </Container>
   );
 };

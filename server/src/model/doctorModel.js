@@ -30,12 +30,13 @@ const docSchema = new mongoose.Schema({
     {
      day:{
       type:String,
-      required:true,
 
      },
-     hours:{
+     startsAt:{
       type:String,
-      required:true,
+     },
+     endsAt:{
+      type:String
      }
     },
   ],
@@ -44,10 +45,10 @@ const docSchema = new mongoose.Schema({
     type: String,
   },
 
-  doctorType: {
-    type: String,
-    enum: ["Specialist", "General"],
-  },
+ about:{
+  type:String,
+  required:true
+ },
 
   appointmentCharges: {
     type: String,

@@ -1,0 +1,74 @@
+#features {
+    background: linear-gradient(135deg, #f9f9f9, #f2f2f2);
+    padding: 60px 0;
+    text-align: center;
+}
+
+.features-container {
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.feature-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card:nth-child(even) {
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    color: white;
+}
+
+.feature-card:nth-child(even) h4,
+.feature-card:nth-child(even) p {
+    color: white;
+}
+
+/* Hover Effect */
+.feature-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Centering Icons */
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    box-shadow: 0px 5px 15px rgba(255, 117, 140, 0.3);
+}
+
+/* Adjust Icon Size */
+.feature-icon {
+    font-size: 30px;
+    color: white;
+}
+
+h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}
+
+p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+@media (min-width: 992px) {
+    
+}

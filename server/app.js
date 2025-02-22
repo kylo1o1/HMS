@@ -21,6 +21,8 @@ app.use(
   })
 );
 
+app.use("/docProfiles", express.static("Public/media/profiles"));
+
 app.use(cookieParser());
 app.use(userRoutes);
 app.use("/admin", adminRouter);
