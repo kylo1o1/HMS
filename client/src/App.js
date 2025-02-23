@@ -9,16 +9,37 @@ import Login from "./Pages/Auth/Login";
 import Header from "./Components/Header";
 import DoctorsList from "./Components/DoctorList";
 import DoctorDetails from "./Components/DoctorDetails";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Auth from "./Utils/Auth";
-import { useEffect } from "react";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
-import RoleBasedRoute from "./Utils/RoleBasedRoute";
 import AddDoctor from "./Components/AdminComponents/AddDoctor";
-import DoctorListFrAdmin from "./Components/AdminComponents/DoctorListFrAdmin";
+import AdminDoctorList from "./Components/AdminComponents/AdminDoctorList";
+import { useEffect } from "react";
+import { fetchDocFail, fetchDocStart, fetchDocSuccess } from "./Redux/dataSlice";
+import instance from "./Axios/instance";
 function App() {
 
   const {isAuthenticated} = useSelector((state)=> (state?.auth?? false))
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        dispatch(fetchDocStart());
+        const res = await instance.get('/admin/view-doctors', { withCredentials: true });
+        console.log(res.data.doctors);
+        
+        if (res.data.success) {
+          dispatch(fetchDocSuccess({ doctors: res.data?.doctors }));
+        } else {
+          dispatch(fetchDocFail(res.data.error));
+        }
+      } catch (error) {
+        dispatch(fetchDocFail(error.message));
+      }
+    };
+
+    fetchDoctors();
+  }, [dispatch]);
 
   return (
     <Router>
@@ -53,7 +74,7 @@ function App() {
          */}
         <Route path="/adminPanel" element={<AdminDashboard/>}>
           <Route path="add-doctor" element={<AddDoctor/>}/>
-          <Route path="doctor-list" element={<DoctorListFrAdmin/>}/>
+          <Route path="doctor-list" element={<AdminDoctorList/>}/>
           
         </Route>
         </Routes>

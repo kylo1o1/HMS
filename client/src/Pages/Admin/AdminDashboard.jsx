@@ -31,7 +31,7 @@ const AdminDashboard = () => {
           </div>
         </Col>
 
-        <Col xs={7} sm={8} md={9} lg={9} className="p-3 content-area">
+        <Col xs={10} sm={9} md={9} lg={9} xl={10} className="p-3 content-area">
             <Outlet/>
         </Col>
       </Row>

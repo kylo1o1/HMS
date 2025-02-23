@@ -1,46 +1,61 @@
-
-
-.add
-.add-doc-title{
+.add-doc-title {
     font-size: 1.125rem;
     color: black;
     font-weight: 500;
-}
-.add-doc-form-wrapper{
+    text-align: center;
+  }
+  
+  .add-doc-form-wrapper {
     background-color: white;
     max-width: 56rem;
     max-height: 80vh;
-    overflow-y: scroll;
-}
-.add-doc-image{
+    overflow-y: auto;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .add-doc-image {
     display: flex;
     align-items: center;
-}
-.add-doc-image img{
+    gap: 1rem;
+  }
+  
+  .add-doc-image img {
     width: 64px;
     height: 64px;
     background-color: #f3f4f6;
     border-radius: 9999px;
-}
-.add-doc-image label{
+  }
+  
+  .add-doc-image label {
     cursor: pointer;
-}
-.add-doc-image p{
+  }
+  
+  .add-doc-image p {
     font-size: medium;
-}
-.add-doc-form-wrapper .form-control{
-    padding-left: .75rem;
-    padding-right: .75rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
+    margin: 0;
+  }
+  
+  .add-doc-form-wrapper .form-control {
+    padding: 0.5rem 0.75rem;
     border: 1px solid rgb(229, 231, 235);
-}
-.add-doc-form-wrapper .form-control:focus{
-
+  }
+  
+  .add-doc-form-wrapper .form-control:focus {
     box-shadow: none;
-}
-
-.other-fields p{
+  }
+  
+  .other-fields p {
     font-size: large;
-    margin-bottom: 0px;
-}
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .add-doc-form-wrapper{
+        width: 100%;
+    }
+    .other-fields {
+      flex-direction: column;
+    }
+  }
+  

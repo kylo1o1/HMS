@@ -23,9 +23,12 @@ const dataSlice = createSlice({
         fetchDocFail :(state,action)=>{
             state.loading = false;
             state.error = action.payload.error;
+        },
+        addDoc:(state,action)=>{
+            state.doctors = [action.payload,...state.doctors]
         }
     }
 })
 
-export const {fetchDocFail,fetchDocStart,fetchDocSuccess} = dataSlice.actions
+export const {fetchDocFail,fetchDocStart,fetchDocSuccess,addDoc} = dataSlice.actions
 export default dataSlice.reducer

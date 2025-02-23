@@ -1,0 +1,26 @@
+.admin-doc-list h1{
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: black;
+}
+.doc-card {
+  max-width: 14rem;
+  overflow: hidden;
+  border-radius: .75rem;
+  border: 1px solid #C9D8FF;
+}
+
+.doc-card .card-img-top{
+  max-width: 14rem;
+  background-color: #EAEFFF;
+  transition: all .5s;
+}
+.card-img-top:hover{
+  background-color: rgb(95, 111, 255);
+}
+.card-body .doc-name{
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: black;  
+}

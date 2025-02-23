@@ -16,11 +16,7 @@ const docSchema = new mongoose.Schema({
     type: [String],
   },
 
-  department: {
-    type: String,
-    required: true,
-  },
-
+ 
   experience: {
     type: Number,
     required: true,

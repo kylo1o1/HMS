@@ -63,9 +63,11 @@ exports.addAdmin = async (req, res) => {
 };
 
 exports.addDoctor = async (req, res) => {
-  const { email, name, gender, contact, ...additionalFields } =
+  const { email, name, gender, contact,dateOfBirth, ...additionalFields } =
     req.body;
 
+  console.log(req.file);
+    
   const session = await mongoose.startSession();
 
   session.startTransaction();
@@ -77,9 +79,8 @@ exports.addDoctor = async (req, res) => {
     const requiredFields = [
       "speciality",
       "qualification",
-      "department",
       "experience",
-      "about"
+      "appointmentCharges",
     ];
 
     const validateError = validateRequest(requiredFields, req.body);
@@ -131,15 +132,18 @@ exports.addDoctor = async (req, res) => {
     if (req.file) {
       doctor.docPicture = req?.file?.path;
     }
-    await doctor.save();
+    await doctor.save()
 
 
     session.commitTransaction();
     await sendLoginInfo(email, password);
 
+
+
     return res.status(201).json({
       success: true,
       message: "Doctor registered",
+      doctor
     });
   } catch (error) {
     if (req.file) {
@@ -148,7 +152,7 @@ exports.addDoctor = async (req, res) => {
 
     session.abortTransaction();
 
-    console.error("Doctor registration error", error.message);
+    console.error("Doctor registration error", error.stack);
     return res.status(500).json({
       success: false,
       message: "Doctor registration Error",
@@ -309,7 +313,7 @@ exports.viewDoctors = async (req, res) => {
     if (!doctors) {
       return res.status(404).json({
         success: false,
-        message: "No Doctors Foud",
+        message: "No Doctors Found",
       });
     }
 
