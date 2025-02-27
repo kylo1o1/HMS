@@ -14,6 +14,7 @@
   .sidebar-items a {
     text-decoration: none;
     padding: 0.875rem 1.5rem;
+    color: #515151;
     transition: background-color 0.3s ease;
   }
   
@@ -28,6 +29,10 @@
     color: inherit;
   }
   
+  .sidebar-items a img{
+    width: 24px;
+    height: 24px;
+  }
   
   .selected-item {
     background-color: rgb(242, 243, 255);

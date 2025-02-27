@@ -79,7 +79,8 @@ const AddDoctor = () => {
         } = values;
       
         const contact={address,phone}
-
+        console.log(contact);
+        
         try {
           formData.append("name", name);
           formData.append("email", email);

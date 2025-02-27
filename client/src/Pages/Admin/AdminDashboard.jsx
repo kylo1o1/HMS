@@ -5,11 +5,12 @@ import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const sideBarItems = [
-    { icon: "/assets/admin/appointment_icon.svg", name: "Appointments",path:"#" },
-    { icon: "/assets/admin/home_icon.svg", name: "Dashboard" ,path:"#"},
+    { icon: "/assets/admin/home_icon.svg", name: "Dashboard" ,path:"adm-dashboard"},
+    { icon: "/assets/admin/appointment_icon.svg", name: "Appointments",path:"appointment-list" },
     { icon: "/assets/admin/add_icon.svg", name: "Add Doctors" , path:"add-doctor"},
     { icon: "/assets/admin/people_icon.svg", name: "Doctors" , path:"doctor-list"},
-    { icon: "/assets/admin/add_icon.svg", name: "Add Medicine" }
+    { icon: "/assets/admin/add_icon.svg", name: "Add Medicine" , path:"add-medicine"},
+    { icon: "/assets/admin/medicine_icon.svg" ,name:"Medicines", path:"medicine-list" }
   ];
 
   const [itemIndex, selectItem] = useState(null);
@@ -17,7 +18,7 @@ const AdminDashboard = () => {
   return (
     <Container fluid>
       <Row>
-        <Col xs={2} sm={2} md={3} lg={3} xl={2}  className="sidebar-col px-0">
+        <Col xs={1} sm={1} md={3} lg={3} xl={2}  className="sidebar-col px-0">
           <div className="sidebar">
             <ul className="sidebar-items mt-2 ">
               {sideBarItems.map((item, index) => (
@@ -31,7 +32,7 @@ const AdminDashboard = () => {
           </div>
         </Col>
 
-        <Col xs={10} sm={9} md={9} lg={9} xl={10} className="p-3 content-area">
+        <Col xs={11} sm={11} md={9} lg={9} xl={10} className="p-0 content-area">
             <Outlet/>
         </Col>
       </Row>

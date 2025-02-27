@@ -8,6 +8,8 @@ const {
   editDiagnosis,
   deleteDiagnosis,
   updatePassword,
+  updateSchedule,
+  getDoctorSchedule,
 } = require("../controller/doctorController");
 const uploadProfile = require("../middlewares/profileMulter");
 const { sendOtp } = require("../controller/generalController");
@@ -16,7 +18,7 @@ const doctorRouter = Router();
 
 doctorRouter.route("/send-Otp-doctor").post(sendOtp);
 doctorRouter
-  .route("/view-profile")
+  .route("/profile")
   .get(authentication, authorization("Doctor"), viewDoctorProfile);
 
 doctorRouter
@@ -33,6 +35,9 @@ doctorRouter
 doctorRouter
   .route("/delete-profile")
   .delete(authentication, authorization("Doctor"), deleteDoctor);
+
+doctorRouter.route("/schedule").get(authentication,authorization("Doctor"),getDoctorSchedule)
+doctorRouter.route("/update-schedule").put(authentication,authorization("Doctor"),updateSchedule)
 
 doctorRouter
   .route("/my-appointments/:appointmentId")

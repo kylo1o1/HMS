@@ -23,5 +23,5 @@ patientRoutes
 patientRoutes
   .route("/delete-profile")
   .delete(authentication, authorization("Patient"), deletePatient); 
-
+patientRoutes.route("/my")
 module.exports = patientRoutes;

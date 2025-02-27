@@ -1,12 +1,15 @@
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { HashLoader } from "react-spinners";
 
-const Loading = () => {
+const Loading = ({ size = 100, color = "#36d7b7", center = true }) => {
   return (
-     <HashLoader
-        size={100}
-     />       
+    <Container
+      className={`d-flex ${center ? "justify-content-center align-items-center" : ""}`}
+      style={{ minHeight: center ? "100vh" : "auto" }}
+    >
+      <HashLoader size={size} color={color} />
+    </Container>
   );
 };
 

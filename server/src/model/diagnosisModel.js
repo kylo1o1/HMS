@@ -16,25 +16,7 @@ const schema = new mongoose.Schema({
     ref: "Doctor",
     required: true,
   },
-  examination: {
-    vitalSigns: {
-      temprature: {
-        type: String,
-      },
-
-      heartRate: {
-        type: String,
-      },
-
-      respitoryRate: {
-        type: String,
-      },
-
-      bloodPressure: {
-        type: String,
-      },
-    },
-  },
+  
 
   diagnosis: {
     type: String,

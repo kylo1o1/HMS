@@ -1,0 +1,14 @@
+
+.medicine-links{
+    text-decoration: none;
+    color: black;
+    transition: transform .3s ease-in-out;
+}
+.medicine-links:hover{
+    transform: translateY(-10px);   
+}
+.medicine-Section .medicine-types img{
+    width: 80px;
+    height: 80px;
+  }
+

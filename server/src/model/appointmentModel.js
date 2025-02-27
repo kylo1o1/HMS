@@ -11,7 +11,8 @@ const appointmentSchema = new mongoose.Schema({
     ref: "Doctor",
     required: true,
   },
-  date: { type: Date, required: true },
+  slotDate:{type:String,required:true},
+  slotTime:{type:String,required:true},
   status: {
     type: String,
     enum: ["Scheduled", "Completed", "Cancelled"],

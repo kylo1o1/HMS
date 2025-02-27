@@ -1,0 +1,35 @@
+
+/* Avatar style */
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  background-color: #f8f9fa; /* light background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Adjust heading spacing, font-size, etc. */
+.patient-profile-container h4 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.patient-profile-container hr {
+  margin: 1rem 0;
+}
+
+/* Make the edit button stand out if needed */
+.patient-profile-container .btn-primary {
+  min-width: 100px;
+}
+
+/* Add spacing between labels and values */
+.patient-profile-container .row.mb-2 {
+  margin-bottom: 1rem; /* Adjust spacing as needed */
+}
+
+.highlight-text{
+    margin-bottom: 0px;
+    color: rgb(59, 130, 246);
+}

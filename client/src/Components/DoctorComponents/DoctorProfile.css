@@ -1,0 +1,117 @@
+/* Remove number input arrows */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=number] {
+  appearance: textfield;
+}
+
+/* Profile Avatar */
+.doctor-avatar {
+  
+  max-width: 200px;
+  max-height: 200px;
+  background-color: rgb(95, 111, 255);
+  display: flex;
+  align-items: start;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.doctor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.doctor-profile-container {
+  padding: 0px;
+}
+
+/* Input Fields */
+.doctor-profile-container .form-control {
+  height: 35px;
+  border-radius: 5px;
+  width: 100%; /* Ensure inputs take full width on smaller screens */
+}
+
+/* Headings */
+.doctor-profile-container h4 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.doctor-profile-container h6 {
+  margin-bottom: 20px;
+  text-decoration: underline;
+  text-transform: uppercase;
+  color: #555;
+}
+
+/* Labels & Values */
+.doctor-profile-container strong {
+  color: #555;
+}
+
+.form-column{
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+.doc-profile-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center; /* Center the name on smaller screens */
+}
+
+.contact-info p {
+  margin-bottom: 0px;
+}
+
+.doc-highlight-text {
+  margin-bottom: 0px;
+  color: #6c757d;
+}
+
+.blue-text {
+  color: rgb(59, 130, 246); /* Blue color only for Email & Phone */
+}
+
+/* Row Styling - Two Columns */
+.doctor-profile-container .row {
+  display: flex;
+  flex-wrap: wrap; /* Allow rows to wrap on smaller screens */
+  margin-bottom: 0.5rem;
+}
+
+.doctor-profile-container .row > .col-md-6 {
+  flex: 1;
+  padding-right: 15px;
+  padding-left: 15px; /* Add padding for better spacing */
+}
+
+/* Buttons */
+.doctor-profile-container .btn-primary {
+  min-width: 100px;
+  background-color: #007bff;
+  border-color: #007bff;
+  transition: 0.3s;
+}
+
+.doctor-profile-container .btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.doctor-profile-container .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.doctor-profile-container .text-danger {
+  font-size: 0.875rem;
+}
+

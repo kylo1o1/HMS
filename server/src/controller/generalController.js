@@ -3,6 +3,7 @@ const { sendOtp } = require("../libs/emailSevices");
 const Doctor = require("../model/doctorModel");
 const Otp = require("../model/OtpModel");
 const User = require("../model/userModel");
+const jwt = require('jsonwebtoken')
 const { verifyPassword, hashPassword } = require("../util/hashPassword");
 const { generateToken } = require("../util/tokenGenerator");
 const crypto = require("crypto");
@@ -206,3 +207,40 @@ exports.verifyOTP = async (req, res) => {
     });
   }
 };
+
+exports.verifyToken = async (req,res) => {
+  
+  const {token} = req.cookies
+  console.log(token);
+  
+  if(!token){
+    return res.status(400).json({
+      success:false,
+      message:"Not Authenticated"
+    })
+  }
+  try {
+    
+    const decoded = jwt.verify(token,process.env.SECRET_KEY);
+    const user = await User.findById(decoded.id).select("-password")
+    console.log(user);
+    
+    return res.status(200).json({
+      success:true,
+      user:{
+        id:user._id,
+        name:user.name,
+        role:user.role,
+        email:user.email
+      },
+      token
+    })
+
+  } catch (error) {
+
+    res.status(401).json({
+      success:false,
+      message:"Invalid Token"
+    })
+  }
+}

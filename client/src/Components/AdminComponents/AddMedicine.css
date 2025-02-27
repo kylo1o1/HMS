@@ -1,0 +1,59 @@
+.add-medicine-title {
+    font-size: 1.125rem;
+    color: black;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .add-medicine-form-wrapper {
+    background-color: white;
+    max-width: 56rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .add-medicine-image {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .add-medicine-image img {
+    width: 64px;
+    height: 64px;
+    background-color: #f3f4f6;
+  }
+  
+  .add-medicine-image label {
+    cursor: pointer;
+  }
+  
+  .add-medicine-image p {
+    font-size: medium;
+    margin: 0;
+  }
+  
+  .add-medicine-form-wrapper .form-control {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgb(229, 231, 235);
+  }
+  
+  .add-medicine-form-wrapper .form-control:focus {
+    box-shadow: none;
+  }
+  
+  .other-fields p {
+    font-size: large;
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .add-medicine-form-wrapper {
+      width: 100%;
+    }
+    .other-fields {
+      flex-direction: column;
+    }
+  }

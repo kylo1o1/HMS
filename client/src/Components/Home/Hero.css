@@ -1,0 +1,71 @@
+
+.hero-container{
+    background-color: rgb(95, 111, 255);
+    padding-left: 5rem;
+    padding-right: 5rem;
+    border-radius: .5rem;
+  }
+  .hero-col-1{
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    padding-top: 10vw;
+    padding-bottom: 10vw;
+    color: white;
+    justify-content: center;
+    justify-items: start;
+  }
+  .hero-col-1 .hero-header{
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 0px;
+    text-transform: capitalize;
+  }
+  .group-of-people{
+    margin-top: 10px;
+    display: flex;
+    font-weight: 300;
+    align-items: center;
+    justify-content: start;
+    font-size: .875rem;
+  }
+  .group-of-people img{
+    width: 7rem;
+  }
+  .group-of-people p{
+    margin-bottom: 0px;
+  }
+  
+  .hero-book-appointment{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .875rem;
+    width: 200px;
+    background-color: white;
+    border-radius: 9999px;
+    text-decoration: none;
+    color: rgb(89, 89, 89);
+    padding:  .75rem 2rem;
+    transition:   transform  .3s ease-in-out;
+    will-change: transform;
+  }
+  .hero-book-appointment:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+  
+  .hero-col-2{
+    position: relative;
+  }
+  .hero-col-2 img{
+    position: absolute;
+    bottom: 0%;
+  }
+  
+  
+  
+  
+  
+  
+  

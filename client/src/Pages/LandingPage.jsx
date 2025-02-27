@@ -1,22 +1,19 @@
 import React from "react";
-import Header from "../Components/Header";
+
 import Hero from "../Components/Home/Hero";
-import "./LandingPage.css"
-import Testimonial from "../Components/Home/Testimonial";
-import Features from "../Components/Home/Features";
+import FindBySpeciality from "../Components/Home/FindBySpeciality";
+import Testimonials from "../Components/Home/Testimonial";
+import MedicineSection from "../Components/Home/MedicineSection";
+
 
 const LandingPage = () => {
   return (
-    <>
-
-   <Hero/>
-
-
-    {/* <Features/> */}
-
-    <Testimonial/>
-
-    </>
+    <div className="landing-Page mx-4 mt-4">
+      <Hero/>
+      <FindBySpeciality />
+      <MedicineSection/>
+      <Testimonials/>
+    </div>
   );
 };
 

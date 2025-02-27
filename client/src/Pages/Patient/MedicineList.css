@@ -1,0 +1,65 @@
+.medicine-list-container {
+  padding: 1rem;
+}
+
+/* Filter Toggle Button */
+.filter-toggle-btn {
+  background-color: #E2E5FF;
+  color: #007bff;
+  border: 1px solid rgb(209, 213, 219);
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.filter-toggle-btn:hover {
+  background-color: #d0d4ff;
+}
+
+/* Filter Sidebar */
+.med-filter-sidebar {
+  padding: 1rem;
+  padding-top: 0;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+}
+
+.med-filter-sidebar h5 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.filter-item {
+  border: 1px solid rgb(209, 213, 219);
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: color 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.filter-item:hover {
+  background-color: transparent;
+  color: #007bff;
+}
+
+.filter-selected {
+  background-color: #E2E5FF;
+  color: #007bff;
+}
+
+/* Search Icon styling */
+.search-icon {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+/* Mobile filter container */
+.mobile-filter {
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}

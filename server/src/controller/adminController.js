@@ -63,105 +63,68 @@ exports.addAdmin = async (req, res) => {
 };
 
 exports.addDoctor = async (req, res) => {
-  const { email, name, gender, contact,dateOfBirth, ...additionalFields } =
-    req.body;
+  const { email, name, gender, contact, dateOfBirth, ...additionalFields } = req.body;
 
   console.log(req.file);
-    
-  const session = await mongoose.startSession();
 
+  const session = await mongoose.startSession();
   session.startTransaction();
   const password = Math.random().toString(36).slice(-8);
 
   try {
     const role = "Doctor";
 
-    const requiredFields = [
-      "speciality",
-      "qualification",
-      "experience",
-      "appointmentCharges",
-    ];
-
+    const requiredFields = ["speciality", "qualification", "experience", "appointmentCharges"];
     const validateError = validateRequest(requiredFields, req.body);
 
     if (validateError) {
-      if (req.file) {
-        unsyncImage(req.file.path);
-      }
-
-      return res.status(400).json({
-        success: false,
-        message: "Please Fill The form",
-        error: validateError,
-      });
+      if (req.file) unsyncImage(req.file.path);
+      return res.status(400).json({ success: false, message: "Please Fill The form", error: validateError });
     }
 
     const exUser = await User.findOne({ email });
 
     if (exUser) {
-      if (req.file) {
-        unsyncImage(req.file.path);
-      }
-
-      return res.status(400).json({
-        success: false,
-        message: `${role} with this email already Exist!!`,
-      });
+      if (req.file) unsyncImage(req.file.path);
+      return res.status(400).json({ success: false, message: `${role} with this email already exists!` });
     }
 
     const hashedPassword = await hashPassword(password);
 
-    const newUser = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      dateOfBirth,
-      gender,
-      role,
-      contact,
-    });
+    const newUser = await User.create([{ name, email, password: hashedPassword, dateOfBirth, gender, role, contact }], { session });
 
-    const savedUser = await newUser.save();
+    const savedUser = newUser[0];
 
-    const doctor = await Doctor.create({
+    const doctorData = {
       userId: savedUser._id,
       ...additionalFields,
-    });
+      shifts: [],
+    };
 
     if (req.file) {
-      doctor.docPicture = req?.file?.path;
+      doctorData.docPicture = req.file.path;
     }
-    await doctor.save()
 
+    const newDoctor = await Doctor.create([doctorData], { session });
 
-    session.commitTransaction();
+    await session.commitTransaction();
     await sendLoginInfo(email, password);
 
+    return res.status(201).json({ success: true, message: "Doctor registered successfully", doctor: newDoctor[0] });
 
-
-    return res.status(201).json({
-      success: true,
-      message: "Doctor registered",
-      doctor
-    });
   } catch (error) {
-    if (req.file) {
-      unsyncImage(req.file.path);
-    }
+    if (req.file) unsyncImage(req.file.path);
 
-    session.abortTransaction();
+    await session.abortTransaction();
+    console.error("Doctor registration error:", error.stack);
 
-    console.error("Doctor registration error", error.stack);
-    return res.status(500).json({
-      success: false,
-      message: "Doctor registration Error",
-      error: error.message,
-    });
+    return res.status(500).json({ success: false, message: "Doctor registration failed", error: error.message });
+
   } finally {
     session.endSession();
   }
 };
+
 
 exports.addPharmacist = async (req, res) => {
   const { email, password, name, dateOfBirth, gender, contact } = req.body;

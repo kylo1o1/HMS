@@ -1,3 +1,57 @@
 .navbar{
     background: #fff;
 }
+
+.header-cart{
+    position: relative;
+}
+.header-cart-count{
+    position: absolute;
+    
+}
+.profile-circle-navbar{
+    border: 1px solid lightblue;
+    
+}
+
+.nav-links {
+    font-size: .875rem;
+}
+.hr-under-navs{
+    display: none;
+    margin: auto;
+    height: .125rem;
+    border: none;
+    opacity: 1;
+    background-color: #5f6fff;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.active-nav {
+    font-weight: 500;
+    color: black !important; 
+}
+  
+.active-nav .hr-under-navs{
+    display: block;
+}
+
+.adm-navbar{
+    border-bottom: 1px solid rgb(229, 231, 235);
+    opacity: 1;
+}
+.adm-header-right {
+    display: flex;
+    align-items: center;
+    
+}
+.adm-header-right p{
+    margin-bottom: 0px;
+}
+.adm-header-indicator{
+    padding: .125rem .625rem ;
+    font-size: small;
+    color: rgb(75, 85, 99);
+    border: 1px solid rgb(107, 114, 128);
+    border-radius: 9999px;
+}

@@ -1,0 +1,19 @@
+.find-by-speciality-wrap{
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  
+  }
+  
+  .find-by-speciality-specialities {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    font-size: .75rem;
+    transition: transform .3s ease-in-out;
+  }
+  .find-by-speciality-specialities:hover{
+    transform: translateY(-10px);
+  }
+  .find-by-speciality-specialities .speciality-img{
+    width: 6rem;
+  }

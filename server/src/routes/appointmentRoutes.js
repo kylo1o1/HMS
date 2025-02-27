@@ -6,27 +6,18 @@ const {
   updateAppointment,
   viewAppointments,
   viewSingleAppointment,
+  bookAppointment,
+  rescheduleAppointment,
+  cancelAppointment,
+  completeAppointment,
+  getPatientAppointments,
 } = require("../controller/appointmentController");
-const { getAppointmentInvoice } = require("../controller/invoiceController");
 const appointmentRoutes = Router();
 
-appointmentRoutes
-  .route("/post")
-  .post(authentication, authorization("Patient"), createAppointment);
-appointmentRoutes
-  .route("/viewAll")
-  .get(
-    authentication,
-    authorization("Patient", "Doctor", "Admin"),
-    viewAppointments
-  );
-appointmentRoutes
-  .route("/:aId")
-  .get(
-    authentication,
-    authorization("Admin", "Patient", "Doctor"),
-    viewSingleAppointment
-  )
-  .put(authentication, authorization("Admin", "Patient"), updateAppointment);
+appointmentRoutes.post("/book",authentication,authorization("Patient"),bookAppointment);
+appointmentRoutes.put("/reschedule",authentication,authorization("Patient","Doctor"),rescheduleAppointment)
+appointmentRoutes.put('/completed',authentication,authorization,completeAppointment)
+appointmentRoutes.put('/cancel',authentication,authorization("Patient","Doctor"),cancelAppointment)
+appointmentRoutes.get("/patientAppointments",authentication,authorization("Patient"),getPatientAppointments)
 
-module.exports = appointmentRoutes;
+module.exports = appointmentRoutes

@@ -1,0 +1,128 @@
+.medicine-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.medicine-card {
+  border: 1px solid #c9d8ff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  background-color: #fff;
+}
+
+.medicine-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.medicine-image-wrapper {
+  overflow: hidden;
+  height: 180px;
+}
+
+.medicine-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.medicine-card:hover .medicine-img {
+  transform: scale(1.05);
+}
+
+.medicine-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.medicine-category {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 0.5rem;
+}
+
+.medicine-description {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* Stock information placed above the price area */
+.medicine-stock-info {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.in-stock {
+  color: green;
+  font-weight: 600;
+}
+
+.out-of-stock {
+  color: red;
+  font-weight: 600;
+}
+
+/* Container for price and cart button */
+.medicine-price-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.medicine-price {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.medicine-price-discounted {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #d9534f;
+  margin-right: 0.5rem;
+}
+
+.medicine-price-original {
+  font-size: 0.9rem;
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* Cart button styling */
+.medicine-add-to-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  width: 30px; 
+  transition: width 0.3s ease;
+  border: none;
+}
+
+.medicine-add-to-cart .cart-text {
+  position: absolute;
+  /* right: 40px; */
+  right: 10px;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.medicine-add-to-cart:hover {
+  width: 120px;
+}
+
+.medicine-add-to-cart:hover .cart-text {
+  opacity: 1;
+}

@@ -1,26 +1,75 @@
-.admin-doc-list h1{
+.admin-doc-list {
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+
+.admin-doc-list h1 {
   font-weight: 500;
   font-size: 1.125rem;
   line-height: 1.75rem;
   color: black;
 }
-.doc-card {
-  max-width: 14rem;
-  overflow: hidden;
-  border-radius: .75rem;
-  border: 1px solid #C9D8FF;
+
+.admin-doc-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: flex-start;
+  row-gap: 1.5rem;
 }
 
-.doc-card .card-img-top{
-  max-width: 14rem;
-  background-color: #EAEFFF;
-  transition: all .5s;
+
+.doc-card {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid #c9d8ff;
 }
-.card-img-top:hover{
+
+.doc-card .doc-img {
+  width: 100%;
+  background-color: #eaefff;
+  transition: all 0.5s;
+}
+
+.doc-img:hover {
   background-color: rgb(95, 111, 255);
 }
-.card-body .doc-name{
+
+.card-body .doc-name {
   font-size: 1.125rem;
   font-weight: 500;
-  color: black;  
+  color: black;
+}
+.admin-doc-row .doc-card .doctor-specialty{
+  text-align: center;
+}
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .admin-doc-row {
+    gap: 0.5rem;
+    row-gap: 1rem;
+  }
+
+  .doc-card {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .doc-card {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .doc-card {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .doc-card {
+    max-width: 14rem;
+  }
 }

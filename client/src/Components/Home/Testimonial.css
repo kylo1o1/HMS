@@ -1,14 +1,61 @@
-.testimonial-carousel {
-  background: linear-gradient(0deg, #FFE4E1, #C6E4F6);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.testimonial-container {
+  background-color: rgb(95, 111, 255);
+  padding: 5rem;
+  border-radius: 0.5rem;
+  color: white;
 }
 
-.testimonial-item {
+.testimonial-content {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.testimonial-title {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 0px;
+  text-transform: capitalize;
+}
+
+.testimonial-info {
+  margin-top: 10px;
+  display: flex;
+  font-weight: 300;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.feedback-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  background-color: white;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: rgb(89, 89, 89);
+  padding: 0.75rem 2rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.feedback-button:hover {
+  transform: scale(1.05);
+  will-change: transform;
+
+  cursor: pointer;
+}
+
+.testimonial-box {
   text-align: center;
   padding: 20px;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
   color: #333;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .testimonial-text {
@@ -17,53 +64,8 @@
   color: #444;
 }
 
-.testimonial-name {
+.testimonial-author {
   font-weight: bold;
   margin-top: 10px;
   color: #007bff;
-}
-
-.carousel-indicators button {
-  background-color: #007bff !important;
-  width: 10px !important;
-  height: 10px !important;
-  border-radius: 50%;
-}
-
-.carousel-indicators .active {
-  background-color: #FF4500 !important;
-}
-
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  filter: invert(50%);
-}
-
-h3.text-primary {
-  color: #FF4500 !important;
-}
-
-h1.fw-bold {
-  color: #333;
-}
-
-.what-they-say p{
-  font-size: large;
-  margin-top:calc(1.5rem * calc(1 - 0)) ;
-}
-.what-they-say button{
-  margin-top:calc(1.5rem * calc(1 - 0)) ;
-  border-radius: 50px;
-}
-
-
-button.btn-outline-primary {
-  border-color: #FF4500;
-  color: #FF4500;
-}
-
-button.btn-outline-primary:hover {
-  background-color: #FF4500;
-  color: white;
-  border: black 1px solid;
 }

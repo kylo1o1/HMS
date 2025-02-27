@@ -26,7 +26,8 @@ const dataSlice = createSlice({
         },
         addDoc:(state,action)=>{
             state.doctors = [action.payload,...state.doctors]
-        }
+        },
+       
     }
 })
 

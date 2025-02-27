@@ -1,10 +1,11 @@
-const { default: mongoose, Types } = require("mongoose");
+const mongoose = require("mongoose");
+const { Types } = mongoose;
 
-const schema = new mongoose.Schema(
+const cartSchema = new mongoose.Schema(
   {
-    patientId: {
+    userId: {
       type: Types.ObjectId,
-      ref: "Patient",
+      required: true,
     },
     medicines: [
       {
@@ -16,27 +17,20 @@ const schema = new mongoose.Schema(
         quantity: {
           type: Number,
           required: true,
+          min: 1,
         },
         amount: {
+          type: Number, 
+        },
+        itemTotal: { 
           type: Number,
+          required: true,
         },
       },
     ],
-
     totalPrice: {
       type: Number,
-      required: true,
-    },
-
-    status: {
-      type: String,
-      enum: ["Pending", "Completed"],
-      default: "Pending",
-    },
-
-    createdAt: {
-      type: Date,
-      default: Date.now(),
+      default: 0,
     },
   },
   {
@@ -44,5 +38,5 @@ const schema = new mongoose.Schema(
   }
 );
 
-const MedicineBill = mongoose.model("MedicineBill", schema);
-module.exports = MedicineBill;
+const Cart = mongoose.model("Cart", cartSchema);
+module.exports = Cart;

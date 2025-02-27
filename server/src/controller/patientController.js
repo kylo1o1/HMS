@@ -115,7 +115,6 @@ exports.viewPatientProfile = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "OK",
       patient,
     });
   } catch (error) {
@@ -218,38 +217,4 @@ exports.deletePatient = async (req, res) => {
   }
 };
 
-exports.viewDoctorSchedules = async (req, res) => {
-  try {
-    const docId = req.params.id;
 
-    if (!docId) {
-      return res.status(400).json({
-        success: false,
-        message: "Id not Found",
-      });
-    }
-
-    const schedules = await Doctor.findOne({ _id: docId }).select(
-      "availableSlots"
-    );
-
-    if (!schedules) {
-      return res.status(404).json({
-        success: false,
-        message: "No Schedules Found",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      schedules,
-    });
-  } catch (error) {
-    console.error("Error fetching Schedules:", error.message);
-    return res.status(500).json({
-      success: false,
-      message: "Error fetching Schedules",
-      error: error.message,
-    });
-  }
-};

@@ -15,27 +15,26 @@ medicineRoutes
   .route("/add")
   .post(
     authentication,
-    authorization("Admin", "Pharmacist"),
-    uploadMedicine.single("med"),
+    authorization("Admin",),
+    uploadMedicine.single("medicineImage"),
     addMedicine
   );
 medicineRoutes
   .route("/viewAll")
   .get(
     authentication,
-    authorization("Admin", "Pharmacist", "Doctor"),
     ViewMedicines
   );
 
 medicineRoutes
   .route("/:medId")
-  .get(authentication, authorization("Pharmacist"), singleMedicine)
+  .get(authentication, authorization("Admin"), singleMedicine)
   .put(
     authentication,
-    authorization("Admin", "Pharmacist"),
+    authorization("Admin"),
     uploadMedicine.single("med"),
     updateMedicines
   )
-  .delete(authentication, authorization("Admin", "Pharmacist"), deleteMedicine);
+  .delete(authentication, authorization("Admin"), deleteMedicine);
 
 module.exports = medicineRoutes;

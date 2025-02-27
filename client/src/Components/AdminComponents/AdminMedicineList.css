@@ -1,0 +1,77 @@
+.admin-med-list {
+  overflow-y: auto;
+  max-height: 90vh;
+  margin: 1.25rem;
+  padding: 0 1rem;
+}
+
+.admin-med-list h1 {
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: black;
+}
+
+.admin-med-row {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 1.5rem;
+}
+
+.med-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgb(229, 231, 235);
+  border-radius: 0.25rem;
+  transition: transform 0.2s ease;
+  background-color: white;
+}
+
+.med-card:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+
+.med-card .card-img-top {
+  background-color: #eaefff;
+  padding: 10px;
+  object-fit: cover;
+}
+
+.med-name {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: black;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .admin-med-row {
+    gap: 0.5rem;
+    row-gap: 1rem;
+  }
+  
+  .med-card {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .med-card {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .med-card {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .med-card {
+    max-width: 14rem;
+  }
+}

@@ -1,0 +1,90 @@
+.patient-appointment-card {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.175);
+  
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.appointment-doc-profile {
+  background-color: rgb(234 239 255);
+  border-radius: 0.5rem;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.doctor-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.doctor-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.specialization {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.date-time {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.my-appointment-heading {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.175);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .patient-appointment-card {
+      padding: 0.75rem;
+  }
+  
+  .doctor-name {
+      font-size: 1rem;
+  }
+  
+  .specialization {
+      font-size: 0.85rem;
+  }
+  
+  .date-time {
+      font-size: 0.8rem;
+  }
+  
+  .appointment-doc-profile {
+      width: 100px;
+      height: 100px;
+  }
+}
+
+/* Tablet and Desktop Styles */
+@media (min-width: 768px) {
+  .patient-appointment-card {
+      padding: 1.25rem;
+  }
+  
+  .doctor-name {
+      font-size: 1.25rem;
+  }
+  
+  .specialization {
+      font-size: 1rem;
+  }
+  
+  .date-time {
+      font-size: 1rem;
+  }
+}

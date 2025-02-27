@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button, Form, Modal, Carousel } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal, Carousel } from "react-bootstrap";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { toast } from "react-toastify";
 import axios from "axios";
 import "./Testimonial.css";
+import { BiRightArrow } from "react-icons/bi";
+import { FaArrowRight } from "react-icons/fa";
 
 function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
-  const [review, setReview] = useState("");
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -21,56 +20,57 @@ function Testimonials() {
       { fullName: "Emily Johnson", review: "Fast and efficient service. Booking appointments was never this easy!" },
       { fullName: "David Wilson", review: "HealthSync is a game-changer in healthcare. Love the intuitive interface!" }
     ];
-    
     setTestimonials(fakeTestimonials);
   }, []);
-  
 
-  const handleFeedback = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:8000/api/v1/testimonial/add", {
-        fullName,
-        email,
-        country,
-        state,
-        review,
-      }, { withCredentials: true });
-      toast.success("Feedback submitted successfully!");
-      setFullName("");
-      setEmail("");
-      setCountry("");
-      setState("");
-      setReview("");
-      setShowForm(false);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Error submitting feedback");
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      country: "",
+      state: "",
+      review: "",
+    },
+    validationSchema: Yup.object({
+      fullName: Yup.string().required("Full name is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      country: Yup.string().required("Country is required"),
+      state: Yup.string().required("State is required"),
+      review: Yup.string().required("Review is required"),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await axios.post("http://localhost:8000/api/v1/testimonial/add", values, { withCredentials: true });
+        toast.success("Feedback submitted successfully!");
+        resetForm();
+        setShowForm(false);
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Error submitting feedback");
+      }
+    },
+  });
 
   return (
-    <Container className="my-5">
+    <Container fluid className="testimonial-container my-5">
       <Row className="align-items-center text-center text-md-start">
-        <Col md={6} className="mb-4 what-they-say" >
-          <h3 className="text-primary">Testimonial</h3>
-          <h1 className="fw-bold">What They Say?</h1>
+        <Col md={6} className="testimonial-content">
+          <h3 className="testimonial-title">Testimonials</h3>
           <p>HealthSync has received more than <strong>10k positive ratings</strong> worldwide.</p>
           <p>Doctors and patients have greatly benefited from HealthSync.</p>
           <p>Have you? Please share your feedback.</p>
-          <Button variant="outline-primary" onClick={() => setShowForm(true)}>Send Your Feedback →</Button>
+          <Button className="feedback-button" onClick={() => setShowForm(true)}>Send Your Feedback <FaArrowRight/></Button>
         </Col>
-        <Col md={6} className="testimonial-carousel">
-        <Carousel fade interval={3000} controls={false} indicators={false}>
-          {testimonials.map((testimonial, index) => (
-            <Carousel.Item key={index}>
-              <div className="testimonial-item">
-                <p className="testimonial-text">"{testimonial.review}"</p>
-                <h5 className="testimonial-name">- {testimonial.fullName}</h5>
-              </div>
-            </Carousel.Item>
-          ))}  
-        </Carousel>
-
+        <Col md={6}>
+          <Carousel fade interval={3000} controls={false} indicators={false}>
+            {testimonials.map((testimonial, index) => (
+              <Carousel.Item key={index}>
+                <div className="testimonial-box">
+                  <p className="testimonial-text">"{testimonial.review}"</p>
+                  <h5 className="testimonial-author">- {testimonial.fullName}</h5>
+                </div>
+              </Carousel.Item>
+            ))}
+          </Carousel>
         </Col>
       </Row>
 
@@ -80,24 +80,49 @@ function Testimonials() {
           <Modal.Title>Submit Your Feedback</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleFeedback}>
-            <Form.Group className="mb-3">
-              <Form.Control type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control type="text" placeholder="Country" value={country} onChange={(e) => setCountry(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control type="text" placeholder="State" value={state} onChange={(e) => setState(e.target.value)} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control as="textarea" rows={3} placeholder="Your Review" value={review} onChange={(e) => setReview(e.target.value)} required />
-            </Form.Group>
-            <Button variant="primary" type="submit" className="w-100">Submit</Button>
-          </Form>
+          <form onSubmit={formik.handleSubmit}>
+            <input
+              type="text"
+              placeholder="Full Name"
+              {...formik.getFieldProps("fullName")}
+              className={`form-control mb-3 ${formik.touched.fullName && formik.errors.fullName ? "is-invalid" : ""}`}
+            />
+            <div className="invalid-feedback">{formik.errors.fullName}</div>
+
+            <input
+              type="email"
+              placeholder="Email"
+              {...formik.getFieldProps("email")}
+              className={`form-control mb-3 ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
+            />
+            <div className="invalid-feedback">{formik.errors.email}</div>
+
+            <input
+              type="text"
+              placeholder="Country"
+              {...formik.getFieldProps("country")}
+              className={`form-control mb-3 ${formik.touched.country && formik.errors.country ? "is-invalid" : ""}`}
+            />
+            <div className="invalid-feedback">{formik.errors.country}</div>
+
+            <input
+              type="text"
+              placeholder="State"
+              {...formik.getFieldProps("state")}
+              className={`form-control mb-3 ${formik.touched.state && formik.errors.state ? "is-invalid" : ""}`}
+            />
+            <div className="invalid-feedback">{formik.errors.state}</div>
+
+            <textarea
+              rows="3"
+              placeholder="Your Review"
+              {...formik.getFieldProps("review")}
+              className={`form-control mb-3 ${formik.touched.review && formik.errors.review ? "is-invalid" : ""}`}
+            />
+            <div className="invalid-feedback">{formik.errors.review}</div>
+
+            <Button type="submit" className="w-100 ">Submit</Button>
+          </form>
         </Modal.Body>
       </Modal>
     </Container>
