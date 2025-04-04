@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import "./FindBySpeciality.css"
 import { Link } from "react-router-dom";
 const FindBySpeciality = () => {
@@ -16,20 +16,31 @@ const FindBySpeciality = () => {
   return (
 
     <Container fluid id="speciality" className="find-by-speciality-wrap">
-      <Row className="justify-content-center text-center">
-            <h1>Find By Speciality</h1>
-            <p>Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.</p>
-            <div className="d-flex justify-content-center pt-4 px-0 gap-4">
-            {specialities.map((speciality, index) => (
-              
-                <Link key={index} to={`/doctorList/${speciality.path}`} className="find-by-speciality-specialities">
-                    <img src={speciality.img} alt={speciality.name} className="speciality-img" />
-                    <p>{speciality.name}</p>
-                </Link>
-            ))}
-            </div>
+    <Row className="justify-content-center text-center">
+      <h1>Find By Speciality</h1>
+      <p>Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.</p>
+      <Row className="g-4 justify-content-center pt-4 px-0">
+        {specialities.map((speciality, index) => (
+          <Col 
+            key={index} 
+            xs={6} 
+            sm={4} 
+            md={3} 
+            lg={2} 
+            className="d-flex justify-content-center"
+          >
+            <Link 
+              to={`/doctorList/${speciality.path}`} 
+              className="find-by-speciality-specialities"
+            >
+              <img src={speciality.img} alt={speciality.name} className="speciality-img" />
+              <p>{speciality.name}</p>
+            </Link>
+          </Col>
+        ))}
       </Row>
-    </Container>
+    </Row>
+  </Container>
 
   );
 };

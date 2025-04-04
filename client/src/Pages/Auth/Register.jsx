@@ -51,39 +51,34 @@ const Register = () => {
   };
 
   return (
-    <Container fluid className="register-container">
-      <Row className="register-wrapper">
-        <Col lg={6} className="register-image-section d-none d-lg-flex align-items-center justify-content-center">
-          <div style={{ width: 400, height: 400 }}>
+
+    <Container fluid className="auth-container">
+      <Row className="auth-wrapper">
+        <Col md={6} className="auth-image-section d-none d-md-flex">
+          <div className="lottie-container">
             <Lottie animationData={animationData} />
           </div>
         </Col>
-
-        <Col lg={6} md={12} className="register-form-section">
-          <Container className="register-container-2">
-            <h2 className="register-title text-center">Sign Up</h2>
-            <Formik
-              initialValues={{
-                name: "",
-                email: "",
-                password: "",
-                confirmPassword: "",
-                gender: "",
-                role: "",
-                phone: "",
-                address: "",
-                dateOfBirth: "",
-              }}
-              validationSchema={schema}
-              onSubmit={handleRegister} 
-            >
-              {({ handleSubmit, handleChange, values, touched, errors }) => (
-                
-                
-                <Form noValidate   onSubmit={handleSubmit}
-                  className="register-form">
-                  
-                  <Row>
+        <Col md={6} className="auth-form-section">
+          <h1 className="auth-title">Create Account</h1>
+          <Formik 
+          initialValues={{
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            gender: "",
+            role: "",
+            phone: "",
+            address: "",
+            dateOfBirth: "",
+          }}
+          validationSchema={schema}
+          onSubmit={handleRegister} 
+          >
+            {({ handleSubmit, handleChange, values, touched, errors }) => (
+              <Form className="auth-form" onSubmit={handleSubmit}>
+                <Row>
                     <Col md={6}>
                       <Form.Group className="form-group">
                         <Form.Label>First Name</Form.Label>
@@ -203,22 +198,24 @@ const Register = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Button type="submit" variant="success"  className="register-btn mt-3 w-100">
-                    Create Account
-                  </Button>
-                 
-                  <p className="register-login-link text-center mt-3">
-                    Already have an account? <Link to="/login">Sign in</Link>
-                  </p>
-                </Form>
-                
-              )}
-              
-            </Formik>
-          </Container>
+              <Button type="submit" className="auth-btn mt-3">
+                Create Account
+              </Button>
+              <p className="auth-link">
+                Already have an account? <Link to="/login">Sign in</Link>
+              </p>
+              <p className="auth-link">
+                              <Link to={"/"}>Home</Link>
+                            </p>
+            </Form>
+            )}
+
+            
+          </Formik>
         </Col>
       </Row>
     </Container>
+    
   );
 };
 

@@ -1,75 +1,97 @@
 .admin-doc-list {
   max-height: 90vh;
   overflow-y: scroll;
+  padding: 0 8px;
 }
 
 .admin-doc-list h1 {
   font-weight: 500;
   font-size: 1.125rem;
-  line-height: 1.75rem;
   color: black;
+  padding: 0 8px;
 }
 
 .admin-doc-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: start;
-  justify-content: flex-start;
-  row-gap: 1.5rem;
+  margin: 0 -4px;
 }
 
-
-.doc-card {
+.adm-doc-card {
   width: 100%;
-  overflow: hidden;
+  height: 100%;
   border-radius: 0.75rem;
   border: 1px solid #c9d8ff;
+  margin: 0 auto;
+  transition: transform 0.2s;
 }
 
-.doc-card .doc-img {
+.adm-doc-card:hover {
+  transform: translateY(-2px);
+}
+
+.adm-doc-card .adm-doc-img {
   width: 100%;
+  height: 180px;
+  object-fit: cover;
   background-color: #eaefff;
-  transition: all 0.5s;
 }
 
-.doc-img:hover {
-  background-color: rgb(95, 111, 255);
-}
-
-.card-body .doc-name {
-  font-size: 1.125rem;
+.card-body .adm-doc-name {
+  font-size: 1rem;
   font-weight: 500;
   color: black;
+  margin-bottom: 0.5rem;
 }
-.admin-doc-row .doc-card .doctor-specialty{
+
+.doctor-specialty {
+  font-size: 0.875rem;
+  color: #666;
   text-align: center;
 }
-/* Responsive adjustments */
+
+
+@media (max-width:768px){
+  .adm-doc-card .adm-doc-img{
+    object-fit: contain;
+  }
+}
 @media (max-width: 576px) {
-  .admin-doc-row {
-    gap: 0.5rem;
-    row-gap: 1rem;
+  .admin-doc-list {
+    padding: 0 4px;
   }
-
-  .doc-card {
-    max-width: 100%;
-  }
-}
-
-@media (min-width: 576px) and (max-width: 768px) {
-  .doc-card {
-    max-width: 100%;
+  
+  .adm-doc-card .adm-doc-img {
+    height: 160px;
   }
 }
 
-@media (min-width: 768px) and (max-width: 992px) {
-  .doc-card {
-    max-width: 100%;
+@media (max-width: 400px) {
+  .adm-doc-name {
+    font-size: 0.9375rem;
+  }
+  
+  .doctor-specialty {
+    font-size: 0.8125rem;
   }
 }
 
-@media (min-width: 992px) {
-  .doc-card {
-    max-width: 14rem;
+@media (max-width: 360px) {
+  .adm-doc-card .adm-doc-img {
+    height: 140px;
+  }
+  
+  .adm-doc-name {
+    font-size: 0.875rem;
+  }
+  
+  .doctor-specialty {
+    font-size: 0.75rem;
+  }
+  
+  .admin-doc-list h1 {
+    font-size: 1rem;
+    padding: 0 4px;
   }
 }
+

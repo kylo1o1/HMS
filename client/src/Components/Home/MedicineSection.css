@@ -1,14 +1,53 @@
+.medicine-Section {
+    padding: 4rem 1rem;
+}
 
-.medicine-links{
+.medicine-links {
     text-decoration: none;
     color: black;
-    transition: transform .3s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+    display: block;
+    padding: 1rem;
 }
-.medicine-links:hover{
-    transform: translateY(-10px);   
-}
-.medicine-Section .medicine-types img{
-    width: 80px;
-    height: 80px;
-  }
 
+.medicine-links:hover {
+    transform: translateY(-10px);
+}
+
+.medicine-Section .medicine-types img {
+    width: 100%;
+    max-width: 80px;
+    height: auto;
+    aspect-ratio: 1/1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .medicine-Section {
+        padding: 2rem 1rem;
+    }
+    
+    .medicine-links {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .medicine-Section h1 {
+        font-size: 1.75rem;
+    }
+    
+    .medicine-Section p {
+        font-size: 0.9rem;
+    }
+    
+    .medicine-types p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (hover: none) {
+    .medicine-links:hover {
+        transform: none;
+    }
+}

@@ -1,193 +1,289 @@
+const { isNumber } = require("razorpay/dist/utils/razorpay-utils");
 const Cart = require("../model/medicineCartModel");
 const Medicine = require("../model/medicineModel");
 
-/**
- * Utility: Recalculate the overall cart total.
- */
 const recalculateTotalPrice = async (cart) => {
-  const total = cart.medicines.reduce((acc, item) => {
-    return acc + (Number(item.itemTotal) || 0);
-  }, 0);
-  cart.totalPrice = total;
+  if (!Array.isArray(cart.medicines)) {
+    console.error("Error: cart.medicines is not an array", cart.medicines);
+    cart.medicines = [];
+  }
+
+  let subtotal = 0;
+  let totalDiscount = 0;
+
+  cart.medicines.forEach((item) => {
+    const price = Number(item.medicineId?.price) || 0;
+    const quantity = Number(item.quantity) || 0;
+    const originalPrice = price * quantity;
+    const discountedPrice = Number(item.itemTotal) || 0;
+
+    subtotal += originalPrice;
+    totalDiscount += originalPrice - discountedPrice;
+  });
+
+  const grandTotal = subtotal - totalDiscount;
+
+  if (isNaN(subtotal) || isNaN(totalDiscount) || isNaN(grandTotal)) {
+    console.error("Error: NaN detected in total calculations", {
+      subtotal,
+      totalDiscount,
+      grandTotal,
+    });
+    return null; // Prevent saving NaN values
+  }
+
+  cart.subtotal = subtotal;
+  cart.totalDiscount = totalDiscount;
+  cart.totalPrice = grandTotal;
+
   await cart.save();
+
   return cart;
 };
 
-
 exports.addToCart = async (req, res) => {
   try {
-    const { userId, medicineId, quantity } = req.body;
+    const { medicineId, quantity } = req.body;
+    const userId = req.id;
 
     if (!userId || !medicineId || quantity === undefined) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
-    }
-
-    if (userId === null || userId === undefined) {
-      return res.status(400).json({ success: false, message: "Invalid userId" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
     }
 
     const qty = Number(quantity);
     if (isNaN(qty) || qty < 1) {
-      return res.status(400).json({ success: false, message: "Quantity must be a positive number" });
+      return res.status(400).json({
+        success: false,
+        message: "Quantity must be a positive number",
+      });
     }
-    
-    // Fetch medicine details
+
     const medicine = await Medicine.findById(medicineId);
     if (!medicine) {
-      return res.status(404).json({ success: false, message: "Medicine not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Medicine not found" });
     }
-    
-    // Calculate discounted price
-    const discountPercentage = Number(medicine.discount) || 0;
-    const discountedPrice = medicine.price * (1 - discountPercentage / 100);
-    const newItemTotal = discountedPrice * qty;
+
+    if (medicine.stock < qty) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Insufficient stock available" });
+    }
 
     let cart = await Cart.findOne({ userId });
-
     if (!cart) {
       cart = new Cart({ userId, medicines: [] });
-    } 
+    }
+
+    const discountedPrice =
+      medicine.price - (medicine.price * medicine.discount) / 100;
 
     const existingItem = cart.medicines.find(
       (item) => item.medicineId.toString() === medicineId
     );
 
     if (existingItem) {
-      existingItem.quantity += qty;  // Add the new quantity to the existing quantity
+      if (medicine.stock < existingItem.quantity + qty) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Not enough stock available" });
+      }
+      existingItem.quantity += qty;
       existingItem.itemTotal = discountedPrice * existingItem.quantity;
     } else {
-      // If medicine is not already in the cart, add it
       cart.medicines.push({
         medicineId,
         quantity: qty,
         amount: discountedPrice,
-        itemTotal: newItemTotal,
+        itemTotal: discountedPrice * qty,
       });
     }
+    console.log(cart);
 
-    // Recalculate the overall total and save the cart
+
     await recalculateTotalPrice(cart);
-
-    res.status(200).json({ success: true, data: cart });
+    
+    await cart.populate("medicines.medicineId");
+    res.status(200).json({
+      success: true,
+      data: {
+        cart,
+        subtotal: cart.subtotal,
+        totalDiscount: cart.totalDiscount,
+        grandTotal: cart.totalPrice,
+      },
+    });
   } catch (error) {
     console.error("Error adding to cart:", error);
-    res.status(500).json({ success: false, message: "Internal server error", error: error.stack });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
-
-
 
 exports.updateCartItem = async (req, res) => {
   try {
-    const { userId, medicineId, quantity } = req.body;
+   const  { quantity } = req.body;
+    const medicineId = req.params.itemId
+    const userId = req.id;
     if (!userId || !medicineId || quantity === undefined) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
     }
-    
+
     const newQuantity = Number(quantity);
-    if (isNaN(newQuantity)) {
-      return res.status(400).json({ success: false, message: "Quantity must be a number" });
+    if (isNaN(newQuantity) || newQuantity < 1) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid quantity" });
     }
-    
+
     const cart = await Cart.findOne({ userId });
     if (!cart) {
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Cart not found" });
     }
-    
-    // Find the medicine item
-    const item = cart.medicines.find((i) => i.medicineId.toString() === medicineId);
+
+    const item = cart.medicines.find(
+      (i) => i.medicineId.toString() === medicineId
+    );
     if (!item) {
-      return res.status(404).json({ success: false, message: "Medicine not found in cart" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Medicine not found in cart" });
     }
-    
-    // Fetch medicine to recalc discounted price
+
     const medicine = await Medicine.findById(medicineId);
     if (!medicine) {
-      return res.status(404).json({ success: false, message: "Medicine not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Medicine not found" });
     }
-    const discountPercentage = Number(medicine.discount) || 0;
-    const discountedPrice = medicine.price * (1 - discountPercentage / 100);
-    
-    if (newQuantity < 1) {
-      // Remove the item if quantity is less than 1.
-        item.quantity -= newQuantity
-      
-    } else {
-      // Update the quantity and recalc itemTotal
-      item.quantity = newQuantity;
-      item.amount = discountedPrice;
-      item.itemTotal = discountedPrice * newQuantity;
+
+    if (newQuantity > medicine.stock) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Not enough stock available" });
     }
-    
+
+    const discountedPrice =
+      medicine.price - (medicine.price * medicine.discount) / 100;
+    item.quantity = newQuantity;
+    item.itemTotal = discountedPrice * newQuantity;
+
     await recalculateTotalPrice(cart);
-    res.status(200).json({ success: true, data: cart });
+    res.status(200).json({
+      success: true,
+      data: {
+        cart,
+        subtotal: cart.subtotal,
+        totalDiscount: cart.totalDiscount,
+        grandTotal: cart.totalPrice,
+      },
+    });
   } catch (error) {
     console.error("Error updating cart item:", error);
-    res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
-
 exports.deleteCartItem = async (req, res) => {
   try {
-    const userId= req.id
+    const userId = req.id;
     const { medicineId } = req.body;
     if (!userId || !medicineId) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
     }
-    
+
     const cart = await Cart.findOne({ userId });
     if (!cart) {
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Cart not found" });
     }
-    
+
     // Remove the medicine from the cart
     cart.medicines = cart.medicines.filter(
       (i) => i.medicineId.toString() !== medicineId
     );
-    
+
     await recalculateTotalPrice(cart);
     res.status(200).json({ success: true, data: cart });
   } catch (error) {
     console.error("Error deleting cart item:", error);
-    res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };
 
-/**
- * GET CART:
- *  - Expects userId as a URL parameter.
- *  - Returns the cart with populated medicine details.
- */
 exports.getCart = async (req, res) => {
   try {
-    const  userId  = req.id;
+    const userId = req.id;
     if (!userId) {
-      return res.status(400).json({ success: false, message: "Missing userId" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing userId" });
     }
+
+    let cart = await Cart.findOne({ userId }).populate(
+      "medicines.medicineId"
+    );
     
-    const cart = await Cart.findOne({ userId }).populate("medicines.medicineId");
+    // ✅ If cart doesn't exist, return an empty cart
     if (!cart) {
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res.status(200).json({
+        success: true,
+        data: {
+          cart: [],
+          subtotal: 0,
+          totalDiscount: 0,
+          grandTotal: 0,
+        },
+      });
     }
-    
-    res.status(200).json({ success: true, data: cart });
+
+    // ✅ Return the cart if it exists
+    res.status(200).json({
+      success: true,
+      data: {
+        cart,
+        subtotal: cart.subtotal,
+        totalDiscount: cart.totalDiscount,
+        grandTotal: cart.totalPrice,
+      },
+    });
   } catch (error) {
     console.error("Error fetching cart:", error);
-    res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };
+
 exports.clearCart = async (req, res) => {
   try {
     const { userId } = req.body;
     if (!userId) {
-      return res.status(400).json({ success: false, message: "Missing userId" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing userId" });
     }
 
     const cart = await Cart.findOne({ userId });
     if (!cart) {
-      return res.status(404).json({ success: false, message: "Cart not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Cart not found" });
     }
 
     // Empty the cart
@@ -195,9 +291,17 @@ exports.clearCart = async (req, res) => {
     cart.totalPrice = 0;
     await cart.save();
 
-    res.status(200).json({ success: true, message: "Cart cleared successfully", data: cart });
+    res.status(200).json({
+      success: true,
+      message: "Cart cleared successfully",
+      data: cart,
+    });
   } catch (error) {
     console.error("Error clearing cart:", error);
-    res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };

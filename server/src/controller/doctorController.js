@@ -24,8 +24,8 @@ exports.viewDoctorProfile = async (req, res) => {
         message: "No Doctor Found",
       });
     }
-    await doctor.populate("userId","-password")
-    
+    await doctor.populate("userId", "-password");
+
     return res.status(200).json({
       success: true,
       doctor,
@@ -33,18 +33,18 @@ exports.viewDoctorProfile = async (req, res) => {
   } catch (error) {}
 };
 
-
-exports.updateDoctor = async (req, res) => {  
+exports.updateDoctor = async (req, res) => {
   const session = await mongoose.startSession();
-  session.startTransaction(); 
+  session.startTransaction();
 
   try {
-    const { name, email, gender, dateOfBirth, contact, ...extraUpdates } = req.body;
+    const { name, email, gender, dateOfBirth, contact, ...extraUpdates } =
+      req.body;
 
     const parsedContact = contact ? JSON.parse(contact) : null;
 
     console.log(contact);
-    
+
     if (Object.keys(req.body).length === 0) {
       return res.status(400).json({
         success: false,
@@ -52,9 +52,18 @@ exports.updateDoctor = async (req, res) => {
       });
     }
 
-    console.log(parsedContact?.phone || "No contact provided", req.file?.path || "No new image");
+    console.log(
+      parsedContact?.phone || "No contact provided",
+      req.file?.path || "No new image"
+    );
 
-    const commonUpdates = { name, email, gender, dateOfBirth, contact: parsedContact };
+    const commonUpdates = {
+      name,
+      email,
+      gender,
+      dateOfBirth,
+      contact: parsedContact,
+    };
     const userId = req.id;
 
     const { user, doctor } = await getUserAndDoctor(userId);
@@ -72,12 +81,12 @@ exports.updateDoctor = async (req, res) => {
     let oldPicture = doctor?.docPicture;
 
     if (req.file) {
-      extraUpdates.docPicture = req.file.path; 
+      extraUpdates.docPicture = req.file.path;
     }
 
     const [updatedUser, updatedDoctor] = await Promise.all([
-      User.findByIdAndUpdate(userId, commonUpdates, { new: true,  }),
-      Doctor.findOneAndUpdate({ userId }, extraUpdates, { new: true,  }).populate(
+      User.findByIdAndUpdate(userId, commonUpdates, { new: true }),
+      Doctor.findOneAndUpdate({ userId }, extraUpdates, { new: true }).populate(
         "userId",
         "-password"
       ),
@@ -87,8 +96,8 @@ exports.updateDoctor = async (req, res) => {
       unsyncImage(oldPicture);
     }
 
-    await session.commitTransaction(); 
-    session.endSession(); 
+    await session.commitTransaction();
+    session.endSession();
 
     return res.status(200).json({
       success: true,
@@ -99,10 +108,9 @@ exports.updateDoctor = async (req, res) => {
     if (req.file) {
       unsyncImage(req.file.path);
     }
-    await session.abortTransaction(); 
+    await session.abortTransaction();
     session.endSession(); // End session
 
-    
     console.error("Updation Error:", error.message);
 
     return res.status(500).json({
@@ -113,13 +121,9 @@ exports.updateDoctor = async (req, res) => {
   }
 };
 
-
-
-
 exports.updatePassword = async (req, res) => {
   try {
     const userId = req.id;
-
 
     const doctor = await User.findOne({ _id: userId, role: "Doctor" });
     if (!doctor) {
@@ -196,7 +200,9 @@ exports.getDoctorSchedule = async (req, res) => {
     const doctor = await Doctor.findOne({ userId: doctorId });
 
     if (!doctor) {
-      return res.status(404).json({ success: false, message: "Doctor not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Doctor not found" });
     }
 
     // ✅ Default Schedule (if no shifts found)
@@ -213,43 +219,103 @@ exports.getDoctorSchedule = async (req, res) => {
     const shifts = doctor.shifts.length > 0 ? doctor.shifts : defaultSchedule;
 
     res.json({ success: true, shifts });
-
   } catch (error) {
     console.error("Error fetching schedule:", error);
-    res.status(500).json({ success: false, message: "Error fetching schedule", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Error fetching schedule",
+      error: error.message,
+    });
   }
 };
 
-
-
-exports.updateSchedule = async (req,res) => {
-  const {shifts} = req.body
+exports.getDoctorPatients = async (req, res) => {
   try {
-    
-    const docId = req.id
+    const userId = req.id;
 
-    const  updatedDoctor = await Doctor.findOneAndUpdate({userId:docId},
-      {shifts},
-      {new:true}
-    )
-
-    if(!updatedDoctor){
+    const doctor = await Doctor.findOne({ userId });
+    if (!doctor) {
       return res.status(404).json({
-        success:false,
-        message:"Doctor Not Found"
-      })
+        success: false,
+        message: "Doctor Not Found",
+      });
+    }
+
+    const appointments = await Appointments.find({
+      doctorId: doctor._id,
+    }).populate({
+      path: "patientId",
+      model: "User",
+      select: "name email",
+    });
+
+    const patients = {};
+
+    appointments.forEach((app) => {
+      const { _id, name, email } = app.patientId;
+
+      if (!patients[_id]) {
+        patients[_id] = {
+          _id,
+          name,
+          email,
+          completed: 0,
+          cancelled: 0,
+          total: 0,
+        };
+      }
+      patients[_id].total += 1;
+      if (app.status === "Scheduled") patients[_id].scheduled += 1;
+      if (app.status === "Completed") patients[_id].completed += 1;
+      if (app.status === "Cancelled") patients[_id].cancelled += 1;
+    });
+
+    return res.status(200).json({
+      success: true,
+      patients: Object.values(patients),
+      numberOfPatients: Object.keys(patients).length,
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed To Fetch Patients",
+      error: error.message,
+    });
+  }
+};
+
+exports.updateSchedule = async (req, res) => {
+  const { shifts } = req.body;
+  try {
+    const docId = req.id;
+
+    const updatedDoctor = await Doctor.findOneAndUpdate(
+      { userId: docId },
+      { shifts },
+      { new: true }
+    );
+
+    if (!updatedDoctor) {
+      return res.status(404).json({
+        success: false,
+        message: "Doctor Not Found",
+      });
     }
 
     return res.status(200).json({
-      success:true,
-      message:"Schedule Updated",
-      shifts:updatedDoctor.shifts
-    })
-
+      success: true,
+      message: "Schedule Updated",
+      shifts: updatedDoctor.shifts,
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error updating schedule", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Error updating schedule",
+      error: error.message,
+    });
   }
-}
+};
 
 exports.addDiagnosisAndPrescription = async (req, res) => {
   const session = await mongoose.startSession();
@@ -416,5 +482,36 @@ exports.deleteDiagnosis = async (req, res) => {
     });
   } finally {
     session.endSession();
+  }
+};
+
+exports.getPatientAppointments = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const userId = req.id; 
+
+    const doctorId = await Doctor.findOne({userId}).select("_id")
+
+    console.log(doctorId);
+    
+    const appointments = await Appointments.find({
+      patientId,
+      doctorId,
+    })
+      .populate("patientId", "name email")
+      .sort({ slotDate: -1, slotTime: -1 });
+
+    res.json({
+      success: true,
+      appointments,
+      patient: await User.findById(patientId).select(
+        "name email phone dateOfBirth gender"
+      ),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };

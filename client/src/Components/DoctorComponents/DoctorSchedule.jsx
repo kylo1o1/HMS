@@ -5,6 +5,7 @@ import "./DoctorSchedule.css";
 import instance from "../../Axios/instance";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchScheduleFailure, fetchScheduleSuccess, setScheduleLoading, setUpdateLoading, updateScheduleFailure, updateScheduleSuccess } from "../../Redux/schedule";
+import { toast } from "react-toastify";
 
 const DoctorSchedule = () => {
      
@@ -61,17 +62,19 @@ const DoctorSchedule = () => {
     try {
       const res = await instance.put("/doctor/update-schedule", { shifts: updatedSchedule }, { withCredentials: true });
       if (res.data.success) {
+        toast.success("Schedule Updated")
         dispatch(updateScheduleSuccess(updatedSchedule));
         setShowModal(false);
       } else {
+        toast.error("Failed To Update Schedule")
         dispatch(updateScheduleFailure("Update failed"));
       }
     } catch (error) {
+      toast.error("Failed To update " || error.message)
       dispatch(updateScheduleFailure(error.message));
     }
   };
 
-  console.log(schedule);
   
 
   return (
@@ -82,9 +85,9 @@ const DoctorSchedule = () => {
       ) : scheduleError ? (
         <p className="text-danger text-center">{scheduleError}</p>
       ) : (
-        <Row className="justify-content-center">
+        <Row className="justify-content-center schedule-row">
           {schedule.map((shift, index) => (
-            <Col xs={6} md={6} lg={4} key={index} className="mb-3">
+            <Col xs={12} md={6} lg={4} key={index} className="mb-3">
               <Card className="schedule-card">
                 <Card.Body>
                   <Card.Title className="text-center">{shift.day}</Card.Title>

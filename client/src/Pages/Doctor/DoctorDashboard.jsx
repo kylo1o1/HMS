@@ -1,48 +1,82 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import "./DoctorDashboard.css";
+import { useDispatch } from "react-redux";
+import instance from "../../Axios/instance";
+import { fetchPatientAppointmentsStart, fetchPatientAppointmentsSuccess } from "../../Redux/patientAppointments";
+import { fetchAppointmentsFailure, fetchAppointmentsStart, fetchAppointmentsSuccess } from "../../Redux/doctorAppoinments";
+import { toast } from "react-toastify";
 
 const DoctorDashboard = () => {
   const sideBarItems = [
-    { icon: "/assets/admin/home_icon.svg", name: "Dashboard", path: "dashboard" },
+    { icon: "/assets/admin/home_icon.svg", name: "Dashboard", path: "" },
     { icon: "/assets/admin/appointment_icon.svg", name: "Appointments", path: "appointments" },
     { icon: "/assets/admin/people_icon.svg", name: "Patients", path: "patients" },
     { icon: "/assets/admin/user.png", name: "Profile", path: "profile" },
-    {icon:"/assets/admin/prescription.png",name:"Schedule",path:"schedule"}
+    { icon: "/assets/admin/prescription.png", name: "Schedule", path: "schedule" }
   ];
 
-  const location = useLocation()
-  const segment = location.pathname.split('/')
-  const currentLocation = segment[segment.length - 1]
-  console.log(currentLocation);
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState("");
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const currentPath = location.pathname.replace("/docPanel/", "");
+    setActiveItem(currentPath || "");
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const fetchDoctorAppointments = async () => {
+      dispatch(fetchAppointmentsStart());
+      try {
+        const { data } = await instance.get("/appointments/doctorAppointments", { withCredentials: true });
   
-  const [itemIndex, selectItem] = useState(null);
-  useEffect(()=>{
-    selectItem(currentLocation)
-  },[currentLocation])
+        if (data.success) {
+          dispatch(fetchAppointmentsSuccess
+            ({
+              appointments: data.appointments,
+              numberOfPatients: data.numberOfPatients,
+              numberOfCompletedAppointments: data.numberOfCompletedAppointments,
+              numberOfCancelledAppointments: data.numberOfCancelledAppointments,
+            })
+          );
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        toast.error(error.message);
+        dispatch(fetchAppointmentsFailure(error.message));
+      }
+    };
+  
+    fetchDoctorAppointments();
+  }, [dispatch]); 
+  
 
   return (
-    <Container fluid>
-      <Row>
-        <Col xs={1} sm={1} md={3} lg={3} xl={2} className="doc-sidebar-col px-0">
-          <div className="doc-sidebar">
-            <ul className="doc-sidebar-items mt-2">
-              {sideBarItems.map((item, index) => (
-                <Link to={`${item.path}`} className={`${itemIndex === item.path  ? "doc-selected-item" : ""} d-flex gap-3 align-items-center`} onClick={() => selectItem(index)}>
-                  <img src={item.icon} alt={item.name} />
-                  <p className="mb-0 mt-0 text-start">{item.name}</p>
-                </Link>
-              ))}
-            </ul>
-          </div>
-        </Col>
-
-        <Col xs={11} sm={11} md={9} lg={9} xl={10} className="p-0 doc-content-area">
-          <Outlet />
-        </Col>
-      </Row>
-    </Container>
+    <div className="doctor-dashboard-container">
+      <div className="doc-sidebar-col">
+        <div className="doc-sidebar">
+          <ul className="doc-sidebar-items mt-1">
+            {sideBarItems.map((item, index) => (
+              <Link
+                key={index}
+                to={`/docPanel/${item.path}`}
+                className={`${activeItem === item.path ? "doc-selected-item" : ""} d-flex gap-3 align-items-center`}
+                onClick={() => setActiveItem(item.path)}
+              >
+                <img src={item.icon} alt={item.name} />
+                <p className="mb-0 mt-0 text-start">{item.name}</p>
+              </Link>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="doc-content-area">
+        <Outlet />
+      </div>
+    </div>
   );
 };
 

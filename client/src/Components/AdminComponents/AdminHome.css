@@ -1,0 +1,239 @@
+.admin-home {
+  padding: 2rem;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 2rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.dashboard-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 80%;
+  background: #5f6fff;
+  border-radius: 4px;
+}
+
+.admin-home-summary-card {
+  border: none;
+  border-radius: 16px;
+  background: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.admin-home-summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(95, 111, 255, 0.1);
+}
+
+.summary-icon-container {
+  position: relative;
+  z-index: 1;
+}
+
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: rgba(95, 111, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-icon {
+  width: 30px;
+  height: 30px;
+  color: #5f6fff;
+}
+
+.summary-content h2 {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.trend-indicator {
+  font-size: 0.875rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.trend-indicator.up {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.trend-indicator.down {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.admin-home-action-btn {
+  position: relative;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  margin-right: 1rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.admin-home-action-btn .btn-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.admin-home-action-btn:hover .btn-overlay {
+  opacity: 1;
+}
+
+.btn-notification {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-notification:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.hover-effect:hover {
+  cursor: pointer;
+}
+.admin-home {
+  padding: 2rem;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Enhanced Card Shadows */
+.admin-home-summary-card {
+  border: none;
+  border-radius: 16px;
+  background: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 1.5rem;
+}
+
+.admin-home-summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .dashboard-title {
+      font-size: 1.75rem;
+  }
+  
+  .summary-content h2 {
+      font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .admin-home {
+      padding: 1.5rem;
+  }
+  
+  .icon-wrapper {
+      width: 50px;
+      height: 50px;
+  }
+  
+  .summary-icon {
+      width: 25px;
+      height: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-home {
+      padding: 1rem;
+  }
+  
+  .dashboard-title {
+      font-size: 1.5rem;
+  }
+  
+  .summary-content h2 {
+      font-size: 1.5rem;
+  }
+  
+  .admin-home-action-btn {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 0.5rem;
+  }
+  
+  .admin-home-summary-card {
+      margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-content h2 {
+      font-size: 1.25rem;
+  }
+  
+  .icon-wrapper {
+      width: 45px;
+      height: 45px;
+  }
+  
+  .summary-icon {
+      width: 22px;
+      height: 22px;
+  }
+  
+  .trend-indicator {
+      font-size: 0.75rem;
+  }
+}
+
+/* Button Responsiveness */
+.admin-home-action-btn {
+
+  min-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .admin-home-action-btn {
+      min-width: 100%;
+  }
+}
+
+@media (max-width:564px){
+  .admin-home-action-btn{
+    font-size: small;
+
+  }
+}

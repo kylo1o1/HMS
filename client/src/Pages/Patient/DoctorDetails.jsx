@@ -8,7 +8,7 @@ import { BiInfoCircle } from "react-icons/bi";
 import { getNext7Days, getTimeRange } from "../../Utils/timeAndDate";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { updateAppointmentFailure, updateAppointmentSuccess } from "../../Redux/appointment";
+import { addPatientAppointment, fetchPatientAppointmentsFailure, updateAppointmentFailure, updateAppointmentSuccess } from "../../Redux/patientAppointments";
 
 const DoctorDetails = () => {
   const { id } = useParams();
@@ -89,7 +89,8 @@ const DoctorDetails = () => {
     const appointmentData = {
       doctorId:doctor._id || "",
       slotDate:selectedDate.formattedDate,
-      slotTime:selectedTime
+      slotTime:selectedTime,
+      fee:doctor.appointmentCharges
     }
     console.log(appointmentData);
     
@@ -102,23 +103,20 @@ const DoctorDetails = () => {
       );
       if(res.data.success){
         toast.success("Appointment booked successfully!");
-        dispatch(updateAppointmentSuccess(res.data.appointment))
+        dispatch(addPatientAppointment(res.data.appointment))
         navigate('/myAppointments')
       }else{
         toast.error("Booking Failed")
-        dispatch(updateAppointmentFailure(res.data.message))
-      }
+        dispatch(fetchPatientAppointmentsFailure(res.data.message));      }
     } catch (err) {
-      toast.error("Failed to book appointment. Please try again.");
-      dispatch(updateAppointmentFailure(error.message))
-
+      console.log(err);
+      
+      toast.error(err.response.data.message);
     }
   };
 
   if (loading) return (
-    <Container className="doctor-profile-container  d-flex justify-content-center">
       <Loading />
-    </Container>
   );
 
   if (error) return (

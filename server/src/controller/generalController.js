@@ -3,7 +3,7 @@ const { sendOtp } = require("../libs/emailSevices");
 const Doctor = require("../model/doctorModel");
 const Otp = require("../model/OtpModel");
 const User = require("../model/userModel");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 const { verifyPassword, hashPassword } = require("../util/hashPassword");
 const { generateToken } = require("../util/tokenGenerator");
 const crypto = require("crypto");
@@ -90,7 +90,7 @@ exports.sendOtp = async (req, res) => {
 
     const otp = crypto.randomInt(10000, 99999).toString();
 
-    const expiresAt = new Date(Date.now() + 1 * 60 * 1000);
+      const expiresAt = new Date(Date.now() + 1 * 60 * 1000);
 
     await Otp.findOneAndUpdate(
       {
@@ -159,9 +159,9 @@ exports.forgotPassword = async (req, res) => {
 
 exports.verifyOTP = async (req, res) => {
   try {
-    const { otp, newPassword } = req.body;
+    const { otp,  } = req.body;
 
-    if (!otp || !newPassword) {
+    if (!otp ) {
       return res.status(400).json({
         success: false,
         message: "Please fill the form",
@@ -176,26 +176,12 @@ exports.verifyOTP = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email: existOtp.email });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User Doesnt exist",
-      });
-    }
-
-    const hashedPassword = await hashPassword(newPassword);
-
-    await User.findOneAndUpdate(
-      { email: existOtp.email },
-      { password: hashedPassword }
-    );
+    
     await existOtp.deleteOne();
 
     return res.status(200).json({
       success: true,
-      message: "Password has been Updated",
+      message: "OTP Verified",
     });
   } catch (error) {
     console.error(error.message);
@@ -207,40 +193,73 @@ exports.verifyOTP = async (req, res) => {
     });
   }
 };
-
-exports.verifyToken = async (req,res) => {
-  
-  const {token} = req.cookies
-  console.log(token);
-  
-  if(!token){
-    return res.status(400).json({
-      success:false,
-      message:"Not Authenticated"
-    })
-  }
+exports.updatePassword = async (req, res) => {
   try {
-    
-    const decoded = jwt.verify(token,process.env.SECRET_KEY);
-    const user = await User.findById(decoded.id).select("-password")
-    console.log(user);
-    
+    const { email, newPassword } = req.body;
+
+    if (!email || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and new password are required",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.password = await hashPassword(newPassword);
+    await user.save();
+
     return res.status(200).json({
-      success:true,
-      user:{
-        id:user._id,
-        name:user.name,
-        role:user.role,
-        email:user.email
-      },
-      token
-    })
-
+      success: true,
+      message: "Password updated successfully",
+    });
   } catch (error) {
-
-    res.status(401).json({
-      success:false,
-      message:"Invalid Token"
-    })
+    console.error("Update Password Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update password",
+      error: error.message,
+    });
   }
-}
+};
+
+
+exports.verifyToken = async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return res.status(400).json({
+      success: false,
+      message: "Not Authenticated",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const user = await User.findById(decoded.id).select("-password");
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        role: user.role,
+        email: user.email,
+      },
+      token,
+    });
+  } catch (error) {
+    res.clearCookie("token"); // Automatically clear expired token
+    res.status(401).json({
+      success: false,
+      message: "Session expired. Please log in again.",
+    });
+  }
+};

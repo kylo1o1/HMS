@@ -32,7 +32,7 @@ medicineRoutes
   .put(
     authentication,
     authorization("Admin"),
-    uploadMedicine.single("med"),
+    uploadMedicine.single("medicineImage"),
     updateMedicines
   )
   .delete(authentication, authorization("Admin"), deleteMedicine);

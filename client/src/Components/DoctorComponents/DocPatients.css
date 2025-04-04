@@ -1,75 +1,384 @@
-.doc-patients-container {
-    padding: 20px;
-  }
-  
-  .title {
+/* Base Styles */
+.dp-container {
+  padding: 2rem;
+  width: 100%;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Header */
+.dp-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dp-header-content {
+  flex: 1;
+}
+
+.dp-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dp-icon {
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+.dp-subtitle {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+/* Stats */
+.dp-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.dp-stat-card {
+  flex: 1;
+  min-width: 200px;
+  background: #e3f2fd;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dp-stat-icon {
+  font-size: 2rem;
+  color: #007bff;
+}
+
+.dp-stat-content h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.dp-stat-content span {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Patient List */
+.dp-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+/* Patient Card */
+.dp-card {
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.dp-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dp-card-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dp-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.dp-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.dp-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dp-status {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.dp-active {
+  background: #28a745;
+  color: white;
+}
+
+.dp-inactive {
+  background: #dc3545;
+  color: white;
+}
+
+.dp-contacts {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.dp-email, .dp-phone {
+  display: block;
+}
+
+/* Progress Bar */
+.dp-progress {
+  margin-top: 1rem;
+}
+
+.dp-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.dp-progress-bar {
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #e9ecef;
+  display: flex;
+  margin-top: 0.5rem;
+}
+
+.dp-progress-completed {
+  background: #28a745;
+  height: 100%;
+}
+
+.dp-progress-cancelled {
+  background: #dc3545;
+  height: 100%;
+}
+
+/* Metrics */
+.dp-metrics {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.dp-metric {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dp-metric span {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.dp-no-patients {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.dp-no-message {
+  padding: 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dp-no-icon {
+  font-size: 3rem;
+  color: #007bff;
+}
+
+.dp-no-message h3 {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+.dp-no-message p {
+  color: #6c757d;
+}
+
+/* Error Message */
+.dp-error {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.dp-error-message {
+  padding: 2rem;
+  background: #f8d7da;
+  border-radius: 1rem;
+}
+
+.dp-error-icon {
+  font-size: 3rem;
+  color: #dc3545;
+}
+
+.dp-error-message h3 {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+.dp-error-message p {
+  color: #721c24;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dp-header {
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
   }
   
-  .patients-list {
-    display: flex;
-    flex-wrap: wrap;
+  .dp-stats {
+    flex-direction: column;
+  }
+  
+  .dp-list {
     justify-content: center;
   }
-  
-  .patient-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    transition: transform 0.2s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .dp-container {
+    padding: 1rem;
   }
-  
-  .patient-card:hover {
-    transform: scale(1.03);
+
+  .dp-header {
+    gap: 1rem;
+    padding: 1rem;
   }
-  
-  .patient-info {
-    display: flex;
+
+  .dp-title {
+    font-size: 1.5rem;
+  }
+
+  .dp-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .dp-stat-card {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .dp-list {
+    flex-direction: column;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
   }
-  
-  .patient-image,
-  .default-user-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #ddd;
-    display: flex;
+
+  .dp-card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dp-container{
+    padding: .5rem;
+  }
+  .dp-header {
+    padding: 0.8rem;
+  }
+
+  .dp-title {
+    font-size: 1.3rem;
+  }
+
+  .dp-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .dp-stat-card {
+    min-width: 100%;
+    text-align: center;
+  }
+
+  .dp-card {
+    width: 100%;
+  }
+
+  .dp-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .dp-name {
+    font-size: 1rem;
+  }
+
+  .dp-status {
+    font-size: 0.7rem;
+  }
+
+  .dp-metrics {
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: #555;
   }
-  
-  .default-user-icon {
-    background: #f0f0f0;
+}
+@media (max-width: 360px) {
+  .dp-container{
+    padding: .1rem;
+    padding-right: .5rem;
   }
-  
-  .patient-name {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
+  .dp-title {
+    font-size: 1.2rem;
   }
-  
-  .patient-email {
-    font-size: 14px;
-    color: #777;
-    margin: 0;
+
+  .dp-subtitle {
+    font-size: 0.8rem;
   }
-  
-  .status-group {
-    display: flex;
-    gap: 10px;
+
+  .dp-stat-card {
+    font-size: 0.85rem;
+    padding: 0.8rem;
   }
-  
-  .badge {
-    font-size: 14px;
-    padding: 5px 10px;
+
+  .dp-card {
+    max-width: 320px;
   }
-  
+
+  .dp-name {
+    font-size: 0.9rem;
+  }
+
+  .dp-status {
+    font-size: 0.7rem;
+  }
+
+  .dp-metrics {
+    gap: 0.2rem;
+  }
+}

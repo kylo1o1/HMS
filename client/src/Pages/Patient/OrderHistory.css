@@ -1,0 +1,139 @@
+/* Modern Card Styling */
+.order-history-container {
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  padding: 0 1.5rem;
+}
+
+.history-header {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 600;
+  color: #5f6fff;
+  text-align: center;
+}
+
+.order-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+}
+
+.order-items-table {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.order-items-table th {
+  background-color: #5f6fff;
+  color: white;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.order-items-table td {
+  padding: 0.75rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.order-items-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-shipped,
+.status-delivered {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Modern Modal */
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+.action-btn {
+  font-size: 0.85rem;
+}
+
+.shadow-xs-hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.shadow-xs-hover:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .order-history-container {
+    padding: 0 1rem;
+  }
+
+  .history-header {
+    font-size: 1.75rem;
+  }
+
+  .order-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .order-items-table th,
+  .order-items-table td {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .order-items-table button {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .order-card .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .order-items-table th,
+  .order-items-table td {
+    font-size: 0.85rem;
+  }
+}

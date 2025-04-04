@@ -10,6 +10,7 @@ import animationData from "../../Lottie/Animation - 1739788656355.json";
 import "./Auth.css";
 import { useDispatch } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../../Redux/authSlice";
+import { useLottie } from "lottie-react";
 
 const Login = () => {
   const schema = yup.object().shape({
@@ -30,8 +31,14 @@ const Login = () => {
         
         toast.success("Login Successful");
         disptach(loginSuccess(res.data));
-        localStorage.setItem("token",res.data.token);
-        navigate("/");
+        const userRole = res.data.user.role;
+                if (userRole === "Admin") {
+                    navigate("/adminPanel");
+                } else if (userRole === "Doctor") {
+                    navigate("/docPanel");
+                } else {
+                    navigate("/");
+                }
       } else {
         toast.error(res.data.message || "Login Failed");
       }
@@ -51,27 +58,26 @@ const Login = () => {
     },
   };
 
+  const {View} = useLottie(defaultOptions)
   return (
-    <Container fluid className="register-container">
-      <Container>
-        <Row className="register-wrapper align-items-center w-100">
-          
-          <Col md={6} className="register-image-section">
-            <div className="register-image">
-              <Lottie options={defaultOptions} height={450} width={450} />
-            </div>
-          </Col>
-          <Col md={5} className="register-form-section ">
-            <h1 className="register-title text-center">Welcome Back</h1>
-            <h2 className="register-title text-center">Login to Your Account</h2>
-            <Formik
-              initialValues={{ email: "", password: "", confirmPassword: "" }}
-              validationSchema={schema}
-              onSubmit={handleLogin}
-            >
-              {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-                <Form onSubmit={handleSubmit} className="login-form">
-                  <Form.Group className="form-group">
+    <Container fluid className="auth-container">
+      <Row className="auth-wrapper">
+        <Col md={6} className="auth-image-section d-none d-md-flex">
+          <div className="lottie-container">
+            {View}
+          </div>
+        </Col>
+        <Col md={6} className="auth-form-section">
+          <h1 className="auth-title">Welcome Back</h1>
+          <h2 className="auth-title" style={{ fontSize: '1.5rem' }}>Login to Your Account</h2>
+          <Formik
+            initialValues={{ email: "", password: "", confirmPassword: "" }}
+            validationSchema={schema}
+            onSubmit={handleLogin}
+          >
+            {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+              <Form className="auth-form" onSubmit={handleSubmit}>
+                    <Form.Group className="form-group">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                       type="email"
@@ -99,21 +105,27 @@ const Login = () => {
                         </Form.Control.Feedback>
                       </Form.Group>
 
-                  
-
-                  <Button variant="primary" type="submit" className="register-btn mt-4 w-100" disabled={isSubmitting}>
-                    {isSubmitting ? "Logging in..." : "Login"}
-                  </Button>
-                  <p className="register-login-link">
-                    Don't have an account? <Link to="/register">Sign up</Link>
-                  </p>
-                </Form>
-              )}
-            </Formik>
-          </Col>
-        </Row>
-      </Container>
+              <Button type="submit" className="auth-btn mt-4">
+                {isSubmitting ? "Logging in..." : "Login"}
+              </Button>
+              <p className="auth-link">
+                Don't have an account? <Link to="/register">Sign up</Link>
+              </p>
+              <p className="auth-link">
+                Forgot Password? <Link to="/forgot-password">Click Here</Link>
+              </p>
+              <p className="auth-link">
+                <Link to={"/"}>Home</Link>
+              </p>
+            </Form>
+            )}
+            
+          </Formik>
+        </Col>
+      </Row>
     </Container>
+
+    
   );
 };
 

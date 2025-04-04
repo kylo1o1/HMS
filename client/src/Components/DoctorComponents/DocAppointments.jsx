@@ -1,108 +1,135 @@
 import React from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row, Badge, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import instance from "../../Axios/instance";
+import { toast } from "react-toastify";
+import { updateAppointmentFailure, updateAppointmentStart, updateAppointmentSuccess } from "../../Redux/doctorAppoinments";
+import { HiCheckCircle, HiXCircle, HiClock, HiUserCircle } from "react-icons/hi";
+import "./DocAppointments.css";
+import { formatDateWithMoment } from "../../Utils/dateUtils";
+import { getInitials } from "../../Utils/helpers";
+import { isToday } from "date-fns";
+import { FaCalendarTimes, FaPlus } from "react-icons/fa";
+
+
 
 const DocAppointments = () => {
-    const appointmentsData = [
-        {
-          id: 1,
-          patient: 'John Doe',
-          status: 'Confirmed', // status field
-          dateTime: '2025-02-25 10:00 AM',
-          doctor: 'Smith',
-          fees: 100,
-        },
-        {
-          id: 2,
-          patient: 'Jane Doe',
-          status: 'Pending',
-          dateTime: '2025-02-26 02:00 PM',
-          doctor: 'Brown',
-          fees: 120,
-        },
-        {
-          id: 3,
-          patient: 'Mark Johnson',
-          status: 'Cancelled',
-          dateTime: '2025-02-27 09:30 AM',
-          doctor: 'Carter',
-          fees: 80,
-        },
-      ];
+  const { appointments } = useSelector((state) => state?.doctorAppointmentData);
+  const dispatch = useDispatch();
+
+  const handleCompletion = async (appointmentId) => {
+    try {
+      dispatch(updateAppointmentStart());
+      const res = await instance.put("/appointments/completed", { appointmentId }, { withCredentials: true });
+      if (res.data.success) {
+        toast.success("Appointment Marked As Completed");
+        dispatch(updateAppointmentSuccess(appointmentId));
+      } else {
+        toast.error("Failed To Change Status");
+        dispatch(updateAppointmentFailure(res.data.message));
+      }
+    } catch (error) {
+      toast.error("Failed To Change Status");
+      dispatch(updateAppointmentFailure(error.message));
+    }
+  };
+  
+  const handleCancellation = async (appointmentId) => {
+    try {
+      dispatch(updateAppointmentStart());
+      const res = await instance.put("/appointments/cancel", { appointmentId }, { withCredentials: true });
+      if (res.data.success) {
+        toast.success("Appointment Marked As Cancelled");
+        dispatch(updateAppointmentSuccess(appointmentId));
+      } else {
+        toast.error("Failed To Change Status");
+        dispatch(updateAppointmentFailure(res.data.message));
+      }
+    } catch (error) {
+      toast.error("Failed To Change Status");
+      dispatch(updateAppointmentFailure(error.message));
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "Completed":
+        return <Badge className="status-badge bg-success"><HiCheckCircle /> Completed</Badge>;
+      case "Cancelled":
+        return <Badge className="status-badge bg-danger"><HiXCircle /> Cancelled</Badge>;
+      default:
+        return <Badge className="status-badge bg-warning text-dark"><HiClock /> Pending</Badge>;
+    }
+  };
+
+  
+  
+
   return (
-    <Container fluid className="appointment-wrapper">
-      <Row className="mt-3">
-        <Col xs={12}>
-          <h5>Appointments</h5>
-        </Col>
+    <Container className="appointments-container">
+      <h4 className="mb-4 fw-bold text-primary">Upcoming Appointments</h4>
+      <Row>
+        {appointments.map((appointment) =>{ 
+          const patientName = appointment?.patientId?.name || "N/A"
+          const initials = getInitials(patientName)
+          
+          return (
+          <Col xs={12} md={6} lg={4} key={appointment._id}>
+            <Card className="appointment-card">
+              <Card.Body>
+                <div className="d-flex align-items-start">
+                {initials ? (
+                      <div className="initials-avatar">
+                        {initials}
+                      </div>
+                    ) : (
+                      <div className="patient-avatar">
+                        <HiUserCircle className="icon" />
+                      </div>
+                    )}
+                  <div className="appointment-details">
+                    <h5 className="patient-name">{appointment?.patientId?.name || "N/A"}</h5>
+                    <p className="appointment-time mb-2">
+                      {formatDateWithMoment(appointment.slotDate)} • {appointment.slotTime}
+                    </p>
+                    <div className="d-flex align-items-center">
+                      {getStatusBadge(appointment.status)}
+                    </div>
+                  </div>
+                </div>
+              </Card.Body>
+              <Card.Footer className="bg-white border-0 d-flex justify-content-between align-items-center pt-0">
+                <span className="fees-text">₹ {appointment.fee}</span>
+                {appointment.status === "Cancelled" || appointment.status === "Completed" ? (
+                  <span className="text-muted small">No actions available</span>
+                ) : (
+                  <div className="action-buttons">
+                    <Button 
+                      variant="success" 
+                      className="btn-complete d-flex align-items-center gap-1"
+                      onClick={() => handleCompletion(appointment._id)}
+                    >
+                      <HiCheckCircle /> Complete
+                    </Button>
+                    <Button 
+                      variant="danger" 
+                      className="btn-cancel d-flex align-items-center gap-1"
+                      onClick={() => handleCancellation(appointment._id)}
+                    >
+                      <HiXCircle /> Cancel
+                    </Button>
+                  </div>
+                )}
+              </Card.Footer>
+            </Card>
+          </Col>
+        )})}
       </Row>
-
-      {/* For larger screens, use a table-like layout */}
-      <div className="d-none d-md-block appointment-table">
-        <Row className="header-row align-items-center">
-          <Col md={1}>#</Col>
-          <Col md={2}>Patient</Col>
-          <Col md={2}>Status</Col>
-          <Col md={3}>Date &amp; Time</Col>
-          <Col md={2}>Doctor</Col>
-          <Col md={1}>Fees</Col>
-          <Col md={1}>Action</Col>
-        </Row>
-        {appointmentsData.map((appointment, index) => (
-          <Row key={appointment.id} className="data-row align-items-center">
-            <Col md={1}>{index + 1}</Col>
-            <Col md={2}>{appointment.patient}</Col>
-            <Col md={2}>{appointment.status}</Col>
-            <Col md={3}>{appointment.dateTime}</Col>
-            <Col md={2}>Dr. {appointment.doctor}</Col>
-            <Col md={1}>₹ {appointment.fees}</Col>
-            <Col md={1}>
-              <Button variant="primary" className="appointment-close-btn">
-                <img src="/assets/admin/cross_icon.png" alt="Close" className="w-100" />
-              </Button>
-            </Col>
-          </Row>
-        ))}
-      </div>
-
-      {/* For smaller screens, use cards */}
-      <div className="d-block d-md-none">
-        {appointmentsData.map((appointment, index) => (
-          <Card key={appointment.id} className="mb-3 appointment-card">
-            <Card.Body>
-              <Row>
-                <Col xs={8}>
-                  <Card.Title>{appointment.patient}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    {appointment.status}
-                  </Card.Subtitle>
-                </Col>
-                <Col xs={4} className="text-end">
-                  <Button variant="primary" className="appointment-close-btn">
-                    <img src="/assets/admin/cross_icon.png" alt="Close" className="w-100" />
-                  </Button>
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Col xs={12}>
-                  <strong>Date &amp; Time:</strong> {appointment.dateTime}
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Col xs={12}>
-                  <strong>Doctor:</strong> Dr. {appointment.doctor}
-                </Col>
-              </Row>
-              <Row className="mt-2">
-                <Col xs={12}>
-                  <strong>Fees:</strong> ₹ {appointment.fees}
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        ))}
-      </div>
     </Container>
   );
 };
 
 export default DocAppointments;
+
+
+

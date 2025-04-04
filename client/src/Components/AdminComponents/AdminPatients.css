@@ -1,0 +1,76 @@
+.admin-patients-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .admin-patients-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .admin-patients-search,
+  .admin-patients-filter {
+    max-width: 300px;
+    border-radius: 5px;
+  }
+  
+  .admin-patients-table {
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-patients-table thead th {
+    background-color: #343a40;
+    color: #ffffff;
+  }
+  
+  .admin-patients-status-active {
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .admin-patients-status-inactive {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  
+  .admin-patients-dropdown-toggle {
+    background-color: #6c757d;
+    color: #ffffff;
+    overlay: auto;
+  }
+  
+  .admin-patients-dropdown-menu {
+    min-width: 150px;
+  }
+  
+  
+  .admin-patients-dropdown-item {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+  
+  .admin-patients-dropdown-item.text-danger {
+    color: #dc3545;
+  }
+  
+  .admin-patients-modal-footer .btn-danger {
+    background-color: #dc3545;
+  }
+  
+  .admin-patients-shadow {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  @media (max-width: 768px) {
+    .admin-patients-search,
+    .admin-patients-filter {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  

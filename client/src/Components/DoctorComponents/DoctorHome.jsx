@@ -1,60 +1,119 @@
-import React, { useEffect, useState } from "react";
-import { Card, Col, Container, Row, Button } from "react-bootstrap";
+import React from "react";
+import { Card, Col, Container, Row, Button, Badge } from "react-bootstrap";
+import { 
+  FaUser, FaCalendarCheck, FaCheckCircle, 
+  FaTimesCircle, FaClock, FaStethoscope, FaPlus, 
+  FaCalendarTimes
+} from "react-icons/fa";
 import "./DoctorHome.css";
+import { useSelector } from "react-redux";
+import { formatDateWithMoment } from "../../Utils/dateUtils";
+import { getInitials, stringToColor } from "../../Utils/helpers";
+import { isToday } from "date-fns";
+import { useNavigate } from "react-router-dom";
+
+
+
+const NoAppointmentsToday = ({ doctorName }) => (
+  <div className="dh-no-appointments">
+    <div className="dh-empty-state">
+      <div className="dh-empty-icon">
+        <FaCalendarTimes />
+      </div>
+      <h4 className="dh-empty-title">No Appointments Today</h4>
+      <p className="dh-empty-text">
+        {`Dr. ${doctorName}, you don't have any scheduled appointments for today.`}
+        <br />
+        Enjoy your day!
+      </p>
+      
+    </div>
+  </div>
+);
+
+
 
 const DoctorHome = () => {
-  const [dashboardData, setDashboardData] = useState({
-    totalPatients: 0,
-    totalAppointments: 0,
-    completedAppointments: 0,
-    cancelledAppointments: 0,
-    latestAppointments: [],
-  });
+  const { appointments, stats } = useSelector((state) => state?.doctorAppointmentData);
 
-  useEffect(() => {
-    // Simulate API call to fetch dashboard data
-    const fetchDashboardData = async () => {
-      const data = {
-        totalPatients: 120,
-        totalAppointments: 350,
-        completedAppointments: 280,
-        cancelledAppointments: 20,
-        latestAppointments: [
-          { id: 1, patient: "John Doe", date: "25-02-2025", status: "Completed" },
-          { id: 2, patient: "Jane Smith", date: "24-02-2025", status: "Scheduled" },
-          { id: 3, patient: "Robert Brown", date: "23-02-2025", status: "Cancelled" },
-        ],
-      };
-      setDashboardData(data);
-    };
+  const {user} = useSelector((state)=>state?.auth?? [])
 
-    fetchDashboardData();
-  }, []);
+  const statsConfig = [
+    { 
+      label: "Total Patients", 
+      value: stats.numberOfPatients,
+      icon: <FaUser className="stat-icon" />,
+      trend: "+12%",
+      bgColor: "#eef0ff",
+      path:"/patients"
+    },
+    { 
+      label: "Appointments", 
+      value: appointments.length,
+      icon: <FaCalendarCheck className="stat-icon" />,
+      trend: "+5%",
+      bgColor: "#e6faf6",
+      path:"/appointments"
 
-  // Function to cancel a scheduled appointment
-  const cancelAppointment = (id) => {
-    setDashboardData((prevData) => ({
-      ...prevData,
-      latestAppointments: prevData.latestAppointments.map((appt) =>
-        appt.id === id ? { ...appt, status: "Cancelled" } : appt
-      ),
-    }));
-  };
+    },
+    { 
+      label: "Completed", 
+      value: stats.numberOfCompletedAppointments,
+      icon: <FaCheckCircle className="stat-icon" />,
+      trend: "82%",
+      bgColor: "#e6faf6"
+    },
+    { 
+      label: "Cancelled", 
+      value: stats.numberOfCancelledAppointments,
+      icon: <FaTimesCircle className="stat-icon" />,
+      trend: "4%",
+      bgColor: "#feeceb"
+    },
+  ];
+
+  const navigate = useNavigate()
+
+  const todaysAppointments = appointments.filter((appt)=> appt.slotDate && isToday(appt.slotDate))
+
 
   return (
-    <Container fluid className="p-4">
+    <Container fluid className="doctor-dashboard">
       <Row className="mb-4">
-        {[
-          { label: "Total Patients", value: dashboardData.totalPatients },
-          { label: "Total Appointments", value: dashboardData.totalAppointments },
-          { label: "Completed Appointments", value: dashboardData.completedAppointments },
-          { label: "Cancelled Appointments", value: dashboardData.cancelledAppointments },
-        ].map((item, index) => (
-          <Col xs={12} sm={6} md={3} key={index} className="mb-3">
-            <Card className="dashboard-card">
+        <Col xs={12}>
+          <div className="dashboard-header">
+            <div className="header-content">
+              <h1 className="dashboard-title">
+                <FaStethoscope className="header-icon" />
+                Welcome Back, Dr. {user.name}
+              </h1>
+              <p className="dashboard-subtitle">Here's your daily overview</p>
+            </div>
+            
+          </div>
+        </Col>
+      </Row>
+
+      <Row className="stats-row">
+        {statsConfig.map((item, index) => (
+          <Col xs={12} sm={6} xl={3} key={index} className="mb-4">
+            <Card className="stat-card">
               <Card.Body>
-                <h5>{item.label}</h5>
-                <h2>{item.value}</h2>
+                <div className="stat-icon-container" style={{ backgroundColor: item.bgColor }}>
+                  {React.cloneElement(item.icon,)}
+                </div>
+                <div className="stat-content">
+                  <h3 className="stat-value">{item.value}</h3>
+                  <div className="stat-meta">
+                    <span className="stat-label">{item.label}</span>
+                    <Badge 
+                      className="stat-trend"
+                      style={{ backgroundColor: item.bgColor }}
+                    >
+                      {item.trend}
+                    </Badge>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>
@@ -62,40 +121,77 @@ const DoctorHome = () => {
       </Row>
 
       <Row>
-        <Col xs={12} lg={6}>
-          <h5 className="mb-3">Latest Appointments</h5>
-          <div className="appointments-list">
-            {dashboardData.latestAppointments.map((appt) => (
-              <Card key={appt.id} className="appointment-card">
-                <Card.Body className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 className="mb-1">{appt.patient}</h6>
-                    <p className="mb-0 text-muted">{appt.date}</p>
-                  </div>
-                  <div className="d-flex align-items-center gap-3">
-                    <span
-                      className={`status-badge ${appt.status.toLowerCase()}`}
-                    >
-                      {appt.status}
-                    </span>
-                    {appt.status === "Scheduled" && (
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => cancelAppointment(appt.id)}
+        <Col xs={12}>
+          <Card className="appointments-card">
+            <Card.Header className="appointments-header">
+              <h5 className="appointments-title">
+                <FaClock className="me-2" />
+                Today's Appointments
+                <Badge pill className="ms-2">
+                  {todaysAppointments.length  === 0 ? "" : todaysAppointments.length}
+                </Badge>
+              </h5>
+              <Button variant="link" className="view-all-btn" onClick={()=> navigate('/docPanel/appointments')}>
+                View All →
+              </Button>
+            </Card.Header>
+            <Card.Body>
+              {todaysAppointments.length === 0 ? (
+                <NoAppointmentsToday doctorName={user.name}/>
+              ):(
+                <div className="appointments-list">
+                {todaysAppointments.map((appt) => (
+                  <div key={appt._id} className="appointment-item">
+                    <div className="patient-info">
+                      <div 
+                        className="patient-avatar"
+                        style={{ backgroundColor: stringToColor(appt.patientId.name) }}
                       >
-                        Cancel
-                      </Button>
-                    )}
+                        {getInitials(appt.patientId.name)}
+                      </div>
+                      <div className="patient-details">
+                        <h6 className="patient-name">{appt.patientId.name}</h6>
+                        <div className="appointment-time">
+                          <span className="date">{formatDateWithMoment(appt.slotDate)}</span>
+                          <span className="time-badge">
+                            <FaClock className="me-1" />
+                            {appt.slotTime || "10:00 AM"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="appointment-status">
+                      <Badge 
+                        className={`status-badge ${appt.status.toLowerCase()}`}
+                        pill
+                      >
+                        {appt.status}
+                      </Badge>
+                      {appt.status === "Scheduled" && (
+                        <Button 
+                          variant="link" 
+                          className="cancel-btn"
+                          title="Cancel Appointment"
+                        >
+                          <FaTimesCircle />
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
+                ))}
+              </div>
+              )}
+              
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>
   );
 };
+
+
+
+
 
 export default DoctorHome;

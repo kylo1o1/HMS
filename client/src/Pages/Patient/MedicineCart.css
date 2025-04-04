@@ -1,39 +1,166 @@
 .medicine-cart {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    
+  padding: 20px;
+}
+
+/* ✅ Cart Header (Desktop) */
+.cart-header {
+  background-color: #f0f3ff;
+  border-bottom: 2px solid #5f6fff;
+  border-radius: 5px;
+}
+
+/* ✅ Cart Item (Desktop) */
+.cart-item {
+  transition: transform 0.2s, background-color 0.3s;
+  border-bottom: 1px solid #f0f3ff;
+  padding: 10px 0;
+}
+
+.cart-item:hover {
+  background-color: #f9faff;
+  transform: scale(1.01);
+}
+
+/* ✅ Quantity Controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity {
+  min-width: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* ✅ Increase/Decrease Buttons */
+.btn-quantity {
+  padding: 5px 14px;
+  background-color: #5f6fff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.btn-quantity:hover {
+  background-color: #4a58f4;
+}
+
+/* ✅ Remove Button */
+.btn-remove {
+  background-color: #ff4d4f;
+  border: none;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.btn-remove:hover {
+  background-color: #e43b3d;
+}
+
+/* ✅ Checkout Button */
+.btn-checkout {
+  background-color: #5f6fff;
+  border: none;
+  color: #fff;
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 3px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-checkout:hover {
+  background-color: #4a58f4;
+  transform: scale(1.02);
+}
+
+/* ✅ Card Styles (Mobile View) */
+.card {
+  border: 1px solid #f0f3ff;
+  border-radius: 5px;
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* ✅ Image Border */
+.car-image {
+  border: 2px solid #f0f3ff;
+  border-radius: 5px;
+}
+
+/* ✅ Empty Cart Section */
+.empty-cart {
+  text-align: center;
+  padding: 50px 0;
+}
+
+.empty-cart svg {
+  color: #ccc;
+  font-size: 50px;
+}
+
+/* ✅ Summary Section */
+.price-summary {
+  background-color: #f9faff;
+  border: 1px solid #f0f3ff;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.price-summary h5 {
+  color: #5f6fff;
+}
+
+.price-summary h6.text-danger {
+  color: #ff4d4f;
+}
+
+/* ✅ Subtotal, Discount, and Grand Total */
+.medicine-cart h5 {
+  font-weight: bold;
+}
+
+/* ✅ Mobile View */
+@media (max-width: 768px) {
+  .cart-item {
+    border-bottom: 1px solid #f0f3ff;
   }
-  
-  .cart-header {
-    background-color: #5f6fff;
-    color: white;
+
+  .btn-quantity {
+    padding: 6px 14px;
   }
-  
-  /* Hover effect for desktop cart items */
+
+  .btn-remove {
+    font-size: 14px;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
   .cart-item:hover {
-    background-color: #f1f1f1;
+    background-color: #f9faff;
   }
-  
-  /* Quantity control styling */
-  .quantity-controls {
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .quantity-controls .quantity {
-    min-width: 25px;
-    text-align: center;
-  }
-  
-  /* Mobile card adjustments */
-  @media (max-width: 767.98px) {
-    .card {
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .card-body {
-      padding: 1rem;
-    }
-  }
-  
+}
+
+/* ✅ Smooth Animations */
+.card,
+.btn-quantity,
+.btn-remove,
+.btn-checkout {
+  transition: all 0.3s ease;
+}
+
+/* ✅ Hover Effects */
+.btn-remove:hover,
+.btn-checkout:hover {
+  transform: scale(1.05);
+}

@@ -160,7 +160,7 @@ const DoctorProfile = () => {
     <Container className="doctor-profile-container bg-transparent">
       <Row className="w-100">
         <Col sm={6} md={6} lg={9} xl={9} className="overflow-x-visible form-column">
-          <Card className="p-4 border-0 bg-transparent">
+          <Card className=" p-sm-2 border-0 bg-transparent">
             <Formik
               initialValues={{
                 name: doctorData?.userId?.name || "",
@@ -218,7 +218,7 @@ const DoctorProfile = () => {
                           <Col xs={5} sm={5} md={5}>
                             <p>{label}:</p>
                           </Col>
-                          <Col xs={5} sm={5} md={7}>
+                          <Col xs={6} sm={6} md={7}>
                             {type === "date" ? (
                               isEditMode ? (
                                 <Field name={name}>
@@ -262,14 +262,14 @@ const DoctorProfile = () => {
 
                     </Col>
 
-                    <Col sm={12} md={12} lg={6} className="mt-sm-3">
+                    <Col xs={12} sm={12} md={12} lg={6} className="mt-sm-3">
                       <h6>Doctor Information</h6>
                       {doctorInfoFields.map(({ label, name, type }) => (
                         <Row key={name}>
-                          <Col xs={5} sm={5} md={5}>
+                          <Col xs={6} sm={5} md={5}>
                             <p>{label}:</p>
                           </Col>
-                          <Col xs={5} sm={5} md={7} className=" d-flex justify-content-center">
+                          <Col xs={6} sm={5} md={7} className=" d-flex justify-content-center">
                             {isEditMode ? (
                               <Field as={Form.Control} type={type} name={name} />
                             ) : (
@@ -287,7 +287,7 @@ const DoctorProfile = () => {
                   <div className="d-flex justify-content-start mt-3">
                     {isEditMode ? (
                       <>
-                        <Button type="button" variant="secondary" className="me-2" onClick={handleCancel}>
+                        <Button type="button" variant="secondary" className="me-2" onClick={()=>{handleCancel();resetForm({values:doctorData})}}>
                           Cancel
                         </Button>
                         <Button type="submit" variant="primary" disabled={!dirty}>

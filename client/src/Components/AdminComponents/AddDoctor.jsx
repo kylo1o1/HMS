@@ -180,6 +180,9 @@ const AddDoctor = () => {
                   Here
                 </p>
               </div>
+              <div className="text-danger">
+                      <ErrorMessage name="pfp" />
+                    </div>
               <Row className="other-fields">
                 <Col className="other-left d-flex flex-column gap-4">
                   <Col>
@@ -209,18 +212,18 @@ const AddDoctor = () => {
                     </div>
                   </Col>
                   <Col>
-                    <p>Set Password</p>
-                    <Form.Control
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                      value={values.password}
-                      onChange={handleChange}
-                    />
-                    <div className="text-danger">
-                      <ErrorMessage name="password" />
-                    </div>
-                  </Col>
+                      <p>Date of Birth</p>
+                      <Form.Control
+                        type="date"
+                        name="dateOfBirth"
+                        value={values.dateOfBirth}
+                        
+                        onChange={handleChange}
+                      />
+                      <div className="text-danger">
+                        <ErrorMessage name="dateOfBirth" />
+                      </div>
+                    </Col>
                   <Col>
                     <p>Experience</p>
                     <Form.Control
@@ -299,19 +302,7 @@ const AddDoctor = () => {
                       <ErrorMessage name="gender" />
                     </div>
                   </Col>
-                  <Col>
-                      <p>Date of Birth</p>
-                      <Form.Control
-                        type="date"
-                        name="dateOfBirth"
-                        value={values.dateOfBirth}
-                        
-                        onChange={handleChange}
-                      />
-                      <div className="text-danger">
-                        <ErrorMessage name="dateOfBirth" />
-                      </div>
-                    </Col>
+                 
                   <Col>
                     <div>
                       <p>Address & Phone</p>

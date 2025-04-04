@@ -14,6 +14,8 @@ const DoctorsList = () => {
   useEffect(() => {
     if (speciality) selectItem(speciality);
   }, [speciality]);
+  console.log(speciality,"_>",itemSelected);
+  
 
   const doctorSpecialties = [
     "General Physician",
@@ -32,6 +34,13 @@ const DoctorsList = () => {
   };
 
   const toggleFilters = () => setShowFilters((prev) => !prev);
+
+  const filteredDoctors = doctors.filter((doc)=> {
+    const matchSpeciality = itemSelected ? doc.speciality === itemSelected :true
+    return matchSpeciality 
+  })
+  console.log(filteredDoctors,"fil");
+  
 
   const DoctorCard = ({ doctor, id }) => {
     const fileName = doctor.docPicture?.split("\\").pop() ?? null;
@@ -57,7 +66,6 @@ const DoctorsList = () => {
       <Row>
         <p className="text-center">Find the right doctor for your needs.</p>
 
-        {/* Mobile Filters */}
         <Row className={`d-lg-none ${showFilters ? "mobile-filter" : "d-none"}`}>
           <Col xs={12}>
             <div className="doc-speciality-filter d-flex flex-column">
@@ -78,22 +86,21 @@ const DoctorsList = () => {
           <Button className="filter-toggle-btn" onClick={toggleFilters}>Filters</Button>
         </Col>
 
-        {/* Desktop Filters */}
         <Col xs={12} md={2} className={`doc-speciality-filter d-flex flex-column d-none d-lg-flex`}>
           {doctorSpecialties.map((item, index) => (
             <p
               className={`mb-2 speciality-item ${itemSelected === item ? "speciality-selected" : ""}`}
-              key={index}
+              key={index} 
               onClick={() => toggleSelect(item)}
             >
-              {item}
+              {item}  
             </p>
           ))}
         </Col>
 
         <Col xs={12} lg={showFilters ? 12 : 10}>
           <div className="doc-cards-container">
-            {doctors.map((doctor) => (
+            {filteredDoctors.map((doctor) => (
               <div key={doctor._id} className="doc-card-wrapper">
                 <DoctorCard doctor={doctor} id={doctor._id} />
               </div>

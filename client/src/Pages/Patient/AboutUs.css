@@ -1,0 +1,99 @@
+.about-us-section {
+    padding: 60px 20px;
+  }
+  
+  .about-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+  }
+  
+  .highlight {
+    color: #007bff;
+  }
+  
+  .about-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .about-image {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+  
+  .about-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .vision-title {
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  .vision-text {
+    max-width: 70%;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .action-buttons {
+    margin-top: 20px;
+  }
+  
+  .why-choose-us {
+    margin-top: 30px;
+  }
+  
+  .why-box {
+    border: #e5e7eb 1px solid;
+    padding: 4rem;
+    text-align: start;
+    margin-bottom: 15px;
+    transition: all ease-in-out .3s;
+  }
+  
+  .why-box h5 {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0px;
+    transition: all ease-in-out .3s;
+
+  }
+  .why-box p{
+    margin-bottom: 0px;
+  }
+  .why-box:hover{
+    cursor: pointer;
+    background-color: rgb(95, 111, 255);
+    color: rgb(255, 255, 255);
+  }
+  .why-box:hover h5{
+    color: rgb(255, 255, 255);
+  }
+  
+  @media (max-width: 768px) {
+    .about-title {
+      font-size: 1.8rem;
+    }
+    
+    .about-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .about-text {
+      font-size: 1rem;
+    }
+    .why-box:hover{
+      cursor: pointer;
+      background-color: rgb(95, 111, 255);
+      color: rgb(255, 255, 255);
+    }
+    .why-box:hover h5{
+      color: rgb(255, 255, 255);
+    }
+  }
+  

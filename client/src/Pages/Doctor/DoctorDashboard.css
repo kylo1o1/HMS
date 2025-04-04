@@ -1,63 +1,83 @@
-.doc-sidebar {
-    border-right: 1px solid rgb(229, 231, 235);
+.doctor-dashboard-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f8f9fd;
+  }
+  
+  .doc-sidebar-col {
+    width: 250px;
+    border-right: 1px solid #e5e7eb;
     min-height: 100vh;
     overflow-y: auto;
-    transition: all 0.3s ease;
-}
-
-.doc-sidebar-items {
+    transition: width 0.3s ease;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .doc-sidebar {
+    flex-grow: 1;
+    padding-top: 1rem;
+  }
+  
+  .doc-sidebar-items {
     list-style: none;
     padding-left: 0;
     margin: 0;
-}
-
-.doc-sidebar-items a {
-    text-decoration: none;
+  }
+  
+  .doc-sidebar-items a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     padding: 0.875rem 1.5rem;
     color: #515151;
+    text-decoration: none;
     transition: background-color 0.3s ease;
-}
-
-.doc-sidebar-items a:hover {
-    cursor: pointer;
-    background-color: rgba(0,0,0,0.03);
-}
-
-.doc-sidebar-items a img {
+  }
+  
+  .doc-sidebar-items a:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+  
+  .doc-sidebar-items img {
     width: 24px;
     height: 24px;
-}
-
-.doc-selected-item {
+  }
+  
+  .doc-selected-item {
     background-color: rgb(242, 243, 255);
     border-right: 4px solid rgb(95, 111, 255);
-}
-
-.doc-content-area {
-    background-color: #f8f9fd;
-}
-
-@media (max-width: 767.98px) {
+  }
+  
+  .doc-content-area {
+    flex-grow: 1;
+    padding: 1.5rem;
+    border-left: 1px solid #e5e7eb;
+  }
+  
+  @media (max-width: 768px) {
+    .doc-sidebar-col {
+      width: 60px;
+    }
     .doc-sidebar-items a {
-        gap: 0 !important;
-        justify-content: center;
-        padding-right: .75rem;
-        padding-left: .75rem;
+      justify-content: center;
+      padding: 0.875rem;
     }
-
     .doc-sidebar-items a p {
-        display: none;
+      display: none;
     }
-}
-
-@media (max-width: 303px) {
-    .doc-sidebar-items li {
-        padding-left: .1rem;
-        padding-right: .1rem;
+  }
+  
+  @media (max-width: 480px) {
+    .doc-sidebar-col {
+      min-width: 50px;
     }
-    .doc-sidebar-items li a {
-        gap: 0 !important;
-        padding-right: 1px;
-        padding-left: 1px;
+  }
+  
+  @media (max-width: 300px) {
+    .doc-sidebar-items a {
+      padding: 0.5rem;
     }
-}
+  }
+  

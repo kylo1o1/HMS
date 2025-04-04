@@ -3,9 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   cart: {
-    userId: null,
     medicines: [],
     totalPrice: 0,
+    subtotal: 0,
+    discount: 0,
+    grandTotal: 0,
   },
   error: null,
 };
@@ -14,65 +16,74 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // Start fetching/updating cart
     cartRequest(state) {
       state.loading = true;
       state.error = null;
     },
-    // Successfully fetched/updated cart
     cartSuccess(state, action) {
       state.loading = false;
-      state.cart = action.payload;
+      console.log(action.payload);
+      
+      state.cart = {
+        ...action.payload,
+        ...calculateTotals(action.payload.medicines),
+      };
       state.error = null;
     },
-    // Failed to update/fetch cart
     cartFail(state, action) {
       state.loading = false;
       state.error = action.payload;
     },
     addItemToCart(state, action) {
-      
       state.cart.medicines.unshift(action.payload);
+      Object.assign(state.cart, calculateTotals(state.cart.medicines));
+    },
+    updateItemQuantity(state, action) {
+      const { medicineId, quantity } = action.payload;
+      const item = state.cart.medicines.find(
+        (item) => item.medicineId._id === medicineId
+      );
 
+      if (item) {
+        item.quantity = quantity;
+        item.itemTotal = item.amount * quantity;
+      }
+
+      Object.assign(state.cart, calculateTotals(state.cart.medicines));
     },
     removeItemFromCart(state, action) {
       state.cart.medicines = state.cart.medicines.filter(
         (item) => item.medicineId._id !== action.payload.medicineId
       );
-      state.cart.totalPrice = state.cart.medicines.reduce((sum, item) => sum + item.itemTotal, 0);
+      Object.assign(state.cart, calculateTotals(state.cart.medicines));
     },
-    updateItemQuantity: (state, action) => {
-      const { medicineId, quantity, amount } = action.payload;
-      console.log(action.payload);
-      
-      const itemIndex = state.cart.medicines.findIndex(item => item.medicineId._id === medicineId);
-
-        if (itemIndex !== -1) {
-          if (quantity <= 0) {
-            // Remove the item from the cart if quantity is 0
-            state.cart.medicines.splice(itemIndex, 1);
-          } else {
-            // Update quantity and itemTotal
-            state.cart.medicines[itemIndex].quantity = quantity;
-            state.cart.medicines[itemIndex].itemTotal = quantity * amount;
-          }
-        }
-      state.cart.totalPrice = state.cart.medicines.reduce((sum, item) => sum + item.itemTotal, 0);  
-    },
-    
     clearCart(state) {
-      state.cart = { userId: state.cart.userId, medicines: [], totalPrice: 0 };
+      state.cart.medicines = [];
+      state.cart.subtotal = 0;
+      state.cart.discount = 0;
+      state.cart.grandTotal = 0;
     },
   },
 });
+
+function calculateTotals(medicines) {
+  const subtotal = medicines.reduce(
+    (sum, item) => sum + item.itemTotal,
+    0
+  );
+  const discount = subtotal * 0.1; // 10% discount
+  const grandTotal = subtotal - discount;
+
+  return { subtotal, discount, grandTotal };
+}
 
 export const {
   cartRequest,
   cartSuccess,
   cartFail,
   addItemToCart,
-  removeItemFromCart,
   updateItemQuantity,
+  removeItemFromCart,
   clearCart,
 } = cartSlice.actions;
 

@@ -1,54 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button, Modal, Carousel } from "react-bootstrap";
-import { useFormik } from "formik";
+import { Container, Row, Col, Button, Modal, Carousel, Form } from "react-bootstrap";
+import { ErrorMessage, Field, Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import axios from "axios";
 import "./Testimonial.css";
-import { BiRightArrow } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa";
+import instance from "../../Axios/instance";
 
 function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fakeTestimonials = [
-      { fullName: "John Doe", review: "Amazing experience! HealthSync made my appointment process seamless." },
-      { fullName: "Jane Smith", review: "Highly recommended! The doctors are very professional and caring." },
-      { fullName: "Michael Brown", review: "A life-changing platform for managing my medical records easily." },
-      { fullName: "Emily Johnson", review: "Fast and efficient service. Booking appointments was never this easy!" },
-      { fullName: "David Wilson", review: "HealthSync is a game-changer in healthcare. Love the intuitive interface!" }
-    ];
-    setTestimonials(fakeTestimonials);
+    const fetchTestimonials = async () => {
+      try {
+        const response = await instance.get("/testimonial");
+        if (response.data.success) {
+          setTestimonials(response.data.testimonials);
+        }
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Error loading testimonials");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTestimonials();
   }, []);
 
-  const formik = useFormik({
-    initialValues: {
-      fullName: "",
-      email: "",
-      country: "",
-      state: "",
-      review: "",
-    },
-    validationSchema: Yup.object({
-      fullName: Yup.string().required("Full name is required"),
-      email: Yup.string().email("Invalid email").required("Email is required"),
-      country: Yup.string().required("Country is required"),
-      state: Yup.string().required("State is required"),
-      review: Yup.string().required("Review is required"),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        await axios.post("http://localhost:8000/api/v1/testimonial/add", values, { withCredentials: true });
-        toast.success("Feedback submitted successfully!");
+  const testimonialSubmit = async (values, { resetForm }) => {
+    try {
+      const response = await instance.post("/testimonial",values);
+      
+      if (response.data.success) {
+        setTestimonials(prevTestimonials => [response.data.savedTestimonial, ...prevTestimonials]);
+        console.log(testimonials);
+        
+        toast.success("Testimonial submitted successfully!");
         resetForm();
         setShowForm(false);
-      } catch (error) {
-        toast.error(error.response?.data?.message || "Error submitting feedback");
       }
-    },
-  });
+      
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || "Submission failed";
+      console.log(errorMessage);
+      
+      toast.error(`${error.response?.data?.message}: ${errorMessage}`);
+    }
+  }
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    position: Yup.string().required("Position is required"),
+    message: Yup.string().required("Message is required"),
+    rating: Yup.number()
+      .min(1, "Rating must be at least 1")
+      .max(5, "Rating cannot exceed 5")
+      .required("Rating is required"),
+  })
 
   return (
     <Container fluid className="testimonial-container my-5">
@@ -58,71 +68,87 @@ function Testimonials() {
           <p>HealthSync has received more than <strong>10k positive ratings</strong> worldwide.</p>
           <p>Doctors and patients have greatly benefited from HealthSync.</p>
           <p>Have you? Please share your feedback.</p>
-          <Button className="feedback-button" onClick={() => setShowForm(true)}>Send Your Feedback <FaArrowRight/></Button>
+          <Button className="feedback-button" onClick={() => setShowForm(true)}>
+            Share Your Experience <FaArrowRight/>
+          </Button>
         </Col>
         <Col md={6}>
-          <Carousel fade interval={3000} controls={false} indicators={false}>
-            {testimonials.map((testimonial, index) => (
-              <Carousel.Item key={index}>
-                <div className="testimonial-box">
-                  <p className="testimonial-text">"{testimonial.review}"</p>
-                  <h5 className="testimonial-author">- {testimonial.fullName}</h5>
-                </div>
-              </Carousel.Item>
-            ))}
-          </Carousel>
+          {loading ? (
+            <div className="text-white">Loading testimonials...</div>
+          ) : (
+            <Carousel fade interval={3000} controls={false} indicators={false}>
+              {testimonials.map((testimonial, index) => (
+                <Carousel.Item key={index}>
+                  <div className="testimonial-box">
+                    <p className="testimonial-text">"{testimonial?.message}"</p>
+                    <h5 className="testimonial-author">- {testimonial?.name}</h5>
+                    <div className="text-muted">{testimonial?.position}</div>
+                    <div className="rating">
+                      {"★".repeat(testimonial?.rating)}{"☆".repeat(5 - testimonial?.rating)}
+                    </div>
+                  </div>
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          )}
         </Col>
       </Row>
 
-      {/* Modal Form for Feedback */}
       <Modal show={showForm} onHide={() => setShowForm(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Submit Your Feedback</Modal.Title>
+          <Modal.Title>Share Your Experience</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={formik.handleSubmit}>
-            <input
-              type="text"
-              placeholder="Full Name"
-              {...formik.getFieldProps("fullName")}
-              className={`form-control mb-3 ${formik.touched.fullName && formik.errors.fullName ? "is-invalid" : ""}`}
-            />
-            <div className="invalid-feedback">{formik.errors.fullName}</div>
+        <Formik
+         initialValues={{ name: "", position: "", message: "", rating: "" }}
+        validationSchema={validationSchema}
+        onSubmit={testimonialSubmit}
+    >
+      {({ handleSubmit, handleChange, handleBlur, values, touched, errors }) => (
+        <Form onSubmit={handleSubmit}>
+          <Field
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            className={`form-control mb-3 ${touched.name && errors.name ? "is-invalid" : ""}`}
+          />
+          <ErrorMessage name="name" component="div" className="invalid-feedback" />
 
-            <input
-              type="email"
-              placeholder="Email"
-              {...formik.getFieldProps("email")}
-              className={`form-control mb-3 ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
-            />
-            <div className="invalid-feedback">{formik.errors.email}</div>
+          <Field
+            type="text"
+            name="position"
+            placeholder="Your Position"
+            className={`form-control mb-3 ${touched.position && errors.position ? "is-invalid" : ""}`}
+          />
+          <ErrorMessage name="position" component="div" className="invalid-feedback" />
 
-            <input
-              type="text"
-              placeholder="Country"
-              {...formik.getFieldProps("country")}
-              className={`form-control mb-3 ${formik.touched.country && formik.errors.country ? "is-invalid" : ""}`}
-            />
-            <div className="invalid-feedback">{formik.errors.country}</div>
+          <Field
+            as="textarea"
+            rows="3"
+            name="message"
+            placeholder="Your Experience"
+            className={`form-control mb-3 ${touched.message && errors.message ? "is-invalid" : ""}`}
+          />
+          <ErrorMessage name="message" component="div" className="invalid-feedback" />
 
-            <input
-              type="text"
-              placeholder="State"
-              {...formik.getFieldProps("state")}
-              className={`form-control mb-3 ${formik.touched.state && formik.errors.state ? "is-invalid" : ""}`}
-            />
-            <div className="invalid-feedback">{formik.errors.state}</div>
+          <Field
+            as="select"
+            name="rating"
+            className={`form-control testimonial-select mb-3 ${touched.rating && errors.rating ? "is-invalid" : ""}`}
+          >
+            <option value="">Select Rating</option>
+            {[5, 4, 3, 2, 1].map(num => (
+              <option key={num} value={num}>
+                {num} Star{num !== 1 ? 's' : ''}
+              </option>
+            ))}
+          </Field>
+          <ErrorMessage name="rating" component="div" className="invalid-feedback" />
 
-            <textarea
-              rows="3"
-              placeholder="Your Review"
-              {...formik.getFieldProps("review")}
-              className={`form-control mb-3 ${formik.touched.review && formik.errors.review ? "is-invalid" : ""}`}
-            />
-            <div className="invalid-feedback">{formik.errors.review}</div>
-
-            <Button type="submit" className="w-100 ">Submit</Button>
-          </form>
+          <Button type="submit" className="w-100">Submit Experience</Button>
+        </Form>
+      )}
+    </Formik>
         </Modal.Body>
       </Modal>
     </Container>

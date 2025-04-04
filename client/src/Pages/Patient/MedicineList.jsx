@@ -50,7 +50,6 @@ const MedicineList = () => {
 
       <Row>
         <p className="text-center">Discover trusted medicines for your health.</p>
-        {/* Sidebar for large screens */}
         <Col xs={12} lg={3} className="d-none d-lg-block">
           <div className="med-filter-sidebar">
             <h5>Search Medicines</h5>
@@ -78,7 +77,6 @@ const MedicineList = () => {
           </div>
         </Col>
 
-        {/* Mobile filters */}
         <Col xs={12} className={`d-lg-none ${showFilters ? "mobile-filter" : "d-none"}`}>
           <div className="med-filter-sidebar pt-0">
             <h5>Search Medicines</h5>
@@ -109,7 +107,7 @@ const MedicineList = () => {
         <Col xs={12} lg={showFilters ? 12 : 9}>
           <Row className="g-4">
             {filteredMedicines.map((medicine) => (
-              <Col key={medicine._id} xs={12} sm={6} md={4} lg={3}>
+              <Col key={medicine._id} xs={12} sm={6} md={4} lg={4}>
                 <MedicineCard medicine={medicine} link={`/medicine/${medicine._id}`} />
               </Col>
             ))}

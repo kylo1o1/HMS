@@ -3,6 +3,10 @@ const Patient = require("../model/patientModel");
 const User = require("../model/userModel");
 const mongoose = require("mongoose");
 const Appointments = require("../model/appointmentModel");
+const generateUniqueId = require("../util/uniqueId");
+const Revenue = require("../model/revenueModel");
+
+
 
 const bookAppointment = async (req, res) => {
   const session = await mongoose.startSession();
@@ -36,6 +40,8 @@ const bookAppointment = async (req, res) => {
         .json({ success: false, message: "Slot already booked" });
     }
 
+    const appointmentId = await generateUniqueId("appointment")
+
     const appointment = new Appointments({
       patientId,
       doctorId,
@@ -45,6 +51,7 @@ const bookAppointment = async (req, res) => {
       fee,
       status: "Scheduled",
       paymentStatus: "Pending",
+      appointmentId, // ✅ Custom Appointment ID
     });
     await appointment.save();
 
@@ -145,10 +152,21 @@ const cancelAppointment = async (req, res) => {
         .json({ success: false, message: "Appointment not found" });
     }
 
+    
+    let doctor 
+    if(userRole === "Doctor"){
+      doctor = await Doctor.findOne({userId})
+      if(!doctor){
+        return res
+        .status(404)
+        .json({ success: false, message: "Doctor not found" });
+      }
+    }
+
     if (
       userRole !== "Admin" &&
       userId !== appointment.patientId.toString() &&
-      userId !== appointment.doctorId.toString()
+      doctor._id.toString() !== appointment.doctorId.toString()
     ) {
       return res
         .status(403)
@@ -168,6 +186,47 @@ const cancelAppointment = async (req, res) => {
   }
 };
 
+const payOnlineAppmnt = async (req,res) => {
+  try {
+    
+    const appntId = req.params.appId
+
+    const appointment = await Appointments.findById(appntId)
+
+    if(!appointment){
+      return res.status(404).json({
+        success:false,
+        message:"Appointment Not Found"
+      })
+    }
+
+    appointment.paymentStatus = "Completed"
+
+    await appointment.save()
+
+     await Revenue.create({
+          sourceId: appointment._id,
+          displayId:appointment.appointmentId,
+          sourceType: "Appointment",
+          amount: appointment.fee,
+        });
+    
+
+    return res.status(200).json({
+      success:true,
+      message:"Payment Success"
+    })
+
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      success:false,
+      message:"Internal Error",
+      error:error.message
+    })
+  }
+}
+
 const completeAppointment = async (req, res) => {
   try {
     const { appointmentId } = req.body;
@@ -180,8 +239,22 @@ const completeAppointment = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Appointment not found" });
     }
+    if(appointment.status === "Completed" || appointment.status === "Cancelled"){
+      return res.status(400).json({
+        success:false,
+        message:`Appointment is  ${appointment.status},You Cannot Update it.`
+      })
+    }
 
-    if (userRole !== "Admin" && userId !== appointment.doctorId.toString()) {
+    const doctor = await Doctor.findOne({userId})
+    if(req.role === "Doctor" && !doctor){
+      return res.status(400).json({
+        success:false,
+        message:"Doctor Not Found"
+      })
+    }
+
+    if (userRole !== "Admin" && doctor._id.toString() !== appointment.doctorId.toString()) {
       return res
         .status(403)
         .json({ success: false, message: "Unauthorized action" });
@@ -213,15 +286,103 @@ const getPatientAppointments = async (req, res) => {
 
     const appointments = await Appointments.find({ patientId: userId }).populate({
     path: "doctorId",
-    select: "userId docPicture speciality -_id ", // Include only the userId and exclude the _id field
+    select: "userId docPicture speciality -_id ", 
     populate: {
-      path: "userId", // Assuming userId is a reference in the Doctor schema
-      select: "name email", // Customize which fields to return
+      path: "userId", 
+      select: "name email", 
     },
   });
     return res.status(200).json({
       success: true,
       appointments,
+    });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed To Fetch Appointments",
+      error: error.message,
+    });
+  }
+};
+
+const getDoctorAppointments = async (req, res) => {
+  try {
+    const userId = req.id;
+
+    const doctorExists = await Doctor.findOne({ userId });
+    if (!doctorExists) {
+      return res.status(404).json({
+        success: false,
+        message: "Doctor Not Found",
+      });
+    }
+
+    const appointments = await Appointments.find({ doctorId: doctorExists._id })
+    .populate({
+      path: "patientId", 
+      model: "User", 
+      select: "name email",
+    }).sort({createdAt:-1});
+    
+    const numberOfPatients = new Set(appointments.map((app)=> app.patientId._id.toString())).size
+    const numberOfAppointments = appointments.length
+    const numberOfCompletedAppointments = appointments.filter(app=> app.status === "Completed").length
+    const numberOfCancelledAppointments = appointments.filter(app=> app.status === "Cancelled").length
+
+
+  return res.status(200).json({
+    success: true,
+    appointments,
+    numberOfPatients,
+    numberOfAppointments,
+    numberOfCompletedAppointments,
+    numberOfCancelledAppointments,
+  });
+    } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed To Fetch Appointments",
+      error: error.message,
+    });
+  }
+};
+
+const getAllAppointments = async (req, res) => {
+  try {  
+    const appointments = await Appointments.find()
+      .populate({
+        path: "patientId",
+        model:  "User",
+        select: "name email",
+      })
+      .populate({
+        path: "doctorId",
+        select: "userId docPicture speciality -_id",
+        populate: {
+          path: "userId",
+          select: "name email",
+        },
+      })
+      .sort({ createdAt: -1 });
+
+      console.log(appointments);
+      
+    const numberOfAppointments = appointments.length;
+    const numberOfCompletedAppointments = appointments.filter(
+      (app) => app.status === "Completed"
+    ).length;
+    const numberOfCancelledAppointments = appointments.filter(
+      (app) => app.status === "Cancelled"
+    ).length;
+
+    return res.status(200).json({
+      success: true,
+      appointments,
+      numberOfAppointments,
+      numberOfCompletedAppointments,
+      numberOfCancelledAppointments,
     });
   } catch (error) {
     console.error(error.message);
@@ -241,5 +402,8 @@ module.exports = {
   rescheduleAppointment,
   cancelAppointment,
   completeAppointment,
-  getPatientAppointments
+  getPatientAppointments,
+  getDoctorAppointments,
+  getAllAppointments,
+  payOnlineAppmnt
 };

@@ -1,80 +1,271 @@
-.dashboard-card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .dashboard-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .dashboard-card h5 {
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  .dashboard-card h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  /* Appointment Cards */
-  .appointments-list {
-    display: flex;
+:root {
+  --primary-color: #5f6fff;
+  --primary-light: #eef0ff;
+  --secondary-color: #10b795;
+  --success-color: #00a37a;
+  --warning-color: #ff9800;
+  --danger-color: #ff4445;
+  --text-primary: #2a2e3d;
+  --text-secondary: #6a6d85;
+  --background-light: #f8f9fe;
+}
+
+.doctor-dashboard {
+  padding: 2rem;
+  background-color: var(--background-light);
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.dashboard-title {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-icon {
+  color: var(--primary-color);
+  font-size: 1.5em;
+}
+
+.dashboard-subtitle {
+  color: var(--text-secondary);
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.new-appointment-btn {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.new-appointment-btn:hover {
+  background-color: #4755ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(95, 111, 255, 0.2);
+}
+
+.stat-card {
+  border: none;
+  border-radius: 1rem;
+  background: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(95, 111, 255, 0.1);
+}
+
+.stat-icon-container {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+}
+
+.stat-content h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.stat-trend {
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.appointments-card {
+  border: none;
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 0.5rem 1rem rgba(95, 111, 255, 0.05);
+}
+
+.appointments-header {
+  background: transparent;
+  border-bottom: 1px solid #eee;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.appointments-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.view-all-btn {
+  color: var(--primary-color);
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0;
+}
+
+.view-all-btn:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.appointment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.appointment-item:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 4px 12px rgba(95, 111, 255, 0.08);
+}
+
+.patient-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.patient-details {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+.patient-name {
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.appointment-time {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.time-badge {
+  display: flex;
+  align-items: center;
+  background: var(--background-light);
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.status-badge.completed {
+  background-color: #e6faf6;
+  color: var(--success-color);
+}
+
+.status-badge.scheduled {
+  background-color: #fff3e0;
+}
+
+.status-badge.cancelled {
+  background-color: #feeceb;
+  color: var(--danger-color);
+}
+
+.cancel-btn {
+  color: var(--danger-color);
+  padding: 0.5rem;
+  margin-left: 1rem;
+  opacity: 0.7;
+}
+
+.cancel-btn:hover {
+  color: var(--danger-color);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
     flex-direction: column;
-    gap: 10px;
+    align-items: stretch;
   }
   
-  .appointment-card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    transition: 0.2s;
+  .appointment-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
   }
   
-  .appointment-card:hover {
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+  .appointment-status {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
   
-  .status-badge {
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    text-transform: capitalize;
+  .patient-details {
+    margin-left: 0;
+    margin-top: 0.5rem;
   }
-  
-  /* Status Colors */
-  .status-badge.completed {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .status-badge.scheduled {
-    background-color: #ffc107;
-    color: black;
-  }
-  
-  .status-badge.cancelled {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  @media (max-width: 576px) {
-    .dashboard-card h5 {
-      font-size: 0.9rem;
-    }
-    .dashboard-card h2 {
-      font-size: 1.6rem;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .dashboard-card {
-      margin-bottom: 10px;
-    }
-  }
-  
+}

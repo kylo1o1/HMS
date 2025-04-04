@@ -2,9 +2,10 @@
 .doctor-schedule-container {
     padding: 20px;
     border-radius: 10px;
+    max-height: 90vh;
   }
   
-  /* Schedule Cards */
+
   .schedule-card {
     background: inherit;
     border-radius: 10px;

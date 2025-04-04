@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import instance from "../../Axios/instance";
 import { toast } from "react-toastify";
 import { logout } from "../../Redux/authSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../Header.css"
 
 const AdminHeader = () => {
-    const {isAuthenticated} = useSelector((state)=>(state?.auth ??  false));
+    const {isAuthenticated,user} = useSelector((state)=>(state?.auth));
     console.log(isAuthenticated);
+    const navigate = useNavigate()
     const disptach = useDispatch()
     
     const handleLogout = async ()=>{
@@ -20,12 +21,13 @@ const AdminHeader = () => {
         if(res.data.success){
           toast.success(" You have been Logged out ")
           disptach(logout())
+          navigate('/')
         }else{
           toast.error("Logout Failed")
         }
   
       } catch (error) {
-              toast.error("Logout Failed");
+        toast.error("Logout Failed");
         
       }}
   return (
@@ -34,7 +36,7 @@ const AdminHeader = () => {
       <Navbar.Brand href="#home">
        <div className="d-flex gap-3 adm-header-right">
             <h3 className="mb-0">HealthSync</h3>
-            <p className="adm-header-indicator">Admin</p>
+            <p className="adm-header-indicator">{user?.role}</p>
        </div>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />

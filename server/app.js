@@ -7,8 +7,10 @@ const doctorRouter = require("./src/routes/doctorRoutes");
 const patientRoutes = require("./src/routes/patientRoutes");
 const appointmentRoutes = require("./src/routes/appointmentRoutes");
 const medicineRoutes = require("./src/routes/medicineRoutes");
-const invoiceRoutes = require("./src/routes/invoicesRoutes");
 const cartRoutes = require('./src/routes/cartRoutes')
+const orderRoutes = require("./src/routes/orderRoutes")
+const revenueRoutes = require("./src/routes/revenueRoutes")
+const testimonialRoutes =  require('./src/routes/testimonialRoutes')
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -31,6 +33,7 @@ app.use("/patient", patientRoutes);
 app.use("/appointments", appointmentRoutes);
 app.use("/medicine", medicineRoutes);
 app.use("/cart",cartRoutes)
-app.use("/invoice", invoiceRoutes);
-
+app.use("/order",orderRoutes)
+app.use("/revenue",revenueRoutes)
+app.use('/testimonial',testimonialRoutes)
 module.exports = app;

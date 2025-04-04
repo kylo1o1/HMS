@@ -21,7 +21,6 @@ exports.generateToken = async (req,res) => {
             success:true,
             message:`${role} logged In`,
             isAuth : true,
-            token,
             user:req.user
         })
 

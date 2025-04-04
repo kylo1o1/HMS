@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { cancelAppointmentFailure, cancelAppointmentSuccess, fetchAppointmentsFailure, fetchAppointmentsStart, fetchAppointmentsSuccess } from "../../Redux/appointment";
+import {   cancelPatientAppointmentFailure, cancelPatientAppointmentSuccess,  fetchPatientAppointmentsFailure, fetchPatientAppointmentsStart, fetchPatientAppointmentsSuccess, updateAppnmtPaymentStatus } from "../../Redux/patientAppointments";
 import instance from "../../Axios/instance";
 import Loading from "../Others/Loading";
 import './PatientAppointments.css'
 import { formatDateWithMoment } from "../../Utils/dateUtils";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const PatientAppointments = () => {
     const dispatch = useDispatch()
 
-    const {appointments,loading,error} = useSelector((state)=> state?.appointmentData)
+    const {appointments,loading,error} = useSelector((state)=> state?.patientAppointmentData)
     
 
     const handleCancellation = async (appointmentId) => {
@@ -24,31 +24,49 @@ const PatientAppointments = () => {
             }
             const res = await instance.put(`/appointments/cancel`,{appointmentId:appointmentId},{withCredentials:true})
             if(res.data.success){
-                dispatch(cancelAppointmentSuccess(appointmentId))
+                dispatch(cancelPatientAppointmentSuccess(appointmentId))
                 toast.success(res.data.message)
             }else{
                 toast.error(res.data.message)
-                dispatch(cancelAppointmentFailure(res.data.message))
+                dispatch(cancelPatientAppointmentFailure(res.data.message))
             }
 
         } catch (error) {
             toast.error("Failed To cancel Appointment")
-            dispatch(cancelAppointmentFailure(error.message))
+            dispatch(cancelPatientAppointmentFailure(error.message))
+        }
+    }
+
+    const handlePayment = async (appointmentId) => {
+        try {
+            
+            const res = await instance.put(`/appointments/payment/${appointmentId}`,{},{withCredentials:true})
+            if(res.data.success){
+                
+                toast.success("Payment Success")
+                dispatch(updateAppnmtPaymentStatus(appointmentId))
+            }else{
+                throw new Error(res.data.message)
+            }
+
+
+        } catch (error) {
+            toast.error(error.message || "Payment Failed")
         }
     }
 
     useEffect(()=>{
         const fetchUserAppointments = async () => {
-            dispatch(fetchAppointmentsStart())
+            dispatch(fetchPatientAppointmentsStart())
             try {
                 const res = await instance.get("/appointments/patientAppointments",{withCredentials:true})
                 if(res.data.success){
-                    dispatch(fetchAppointmentsSuccess(res.data.appointments))
+                    dispatch(fetchPatientAppointmentsSuccess(res.data.appointments))
                 }else{
-                    dispatch(fetchAppointmentsFailure(res.data.message))
+                    dispatch(fetchPatientAppointmentsFailure(res.data.message))
                 }
             } catch (error) {
-                dispatch(fetchAppointmentsFailure(error.message))
+                dispatch(fetchPatientAppointmentsFailure(error.message))
             }
         }
         fetchUserAppointments()
@@ -94,7 +112,13 @@ const PatientAppointments = () => {
                     <Col xs={12} md={3} className="text-md-end text-center">
                         {appointment.status !== "Cancelled" ? (
                             <>
-                                <Button variant="outline-primary" className="mb-2 w-100 w-md-auto me-md-2">
+                                <Button
+                                 variant="outline-primary" 
+                                 className={`mb-2 w-100 w-md-auto me-md-2 `}
+                                 
+                                 onClick={()=>handlePayment(appointment._id)}
+                                 
+                                 >
                                     Pay Online
                                 </Button>
                                 <Button 

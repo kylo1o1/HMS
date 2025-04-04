@@ -1,0 +1,142 @@
+/* DocAppointments.css */
+.appointments-container {
+    padding: 2rem 0;
+  }
+  
+  .appointment-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  
+  .appointment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+  
+  .patient-avatar {
+    width: 60px;
+    height: 60px;
+    background-color: #f0f2f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  
+  .patient-avatar .icon {
+    color: #6c757d;
+    font-size: 2.5rem;
+  }
+  
+  .appointment-details {
+    padding-left: 1rem;
+  }
+  
+  .patient-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+  }
+  
+  .appointment-time {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 0.75rem;
+  }
+  
+  .status-badge {
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .fees-text {
+    font-weight: 700;
+    color: #3498db;
+    font-size: 1.1rem;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 0.75rem;
+  }
+  
+  .btn-complete {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+    padding: 0.375rem 1rem;
+  }
+  
+  .btn-cancel {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+    padding: 0.375rem 1rem;
+  }
+  
+.initials-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background-color: #3498db;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+  }
+  
+  .patient-avatar .icon {
+    color: #bdc3c7;
+  }
+
+  @media (max-width: 768px) {
+    .appointment-card {
+      margin-bottom: 1rem;
+    }
+    
+    .patient-avatar {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .patient-name {
+      font-size: 1rem;
+    }
+    
+    .action-buttons {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .btn-complete,
+    .btn-cancel {
+      flex: 1;
+      font-size: 0.85rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .appointments-container {
+      padding: 1rem;
+    }
+    
+    .appointment-card {
+      border-radius: 12px;
+    }
+    
+    .status-badge {
+      font-size: 0.8rem;
+    }
+  }

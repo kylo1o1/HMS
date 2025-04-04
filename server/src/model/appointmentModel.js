@@ -11,6 +11,10 @@ const appointmentSchema = new mongoose.Schema({
     ref: "Doctor",
     required: true,
   },
+  appointmentId:{
+    type:String,
+    required:true
+  },
   slotDate:{type:String,required:true},
   slotTime:{type:String,required:true},
   status: {
@@ -18,20 +22,7 @@ const appointmentSchema = new mongoose.Schema({
     enum: ["Scheduled", "Completed", "Cancelled"],
     default: "Scheduled",
   },
-  reason:{
-    type:String
-  },
-  notes: { type: String },
   
-  hasVisited: {
-    type: Boolean,
-    default: false,
-  },
-
-  diagnosisId:{
-    type:Types.ObjectId,
-    ref:"Diagnosis"
-  },
 
   fee:{
     type:Number

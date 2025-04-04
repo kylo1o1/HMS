@@ -1,36 +1,38 @@
 import React, { useState } from "react";
 import { Container, Nav, Navbar, NavDropdown, Image, Badge } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import instance from "../Axios/instance";
 import { toast } from "react-toastify";
 import { logout } from "../Redux/authSlice";
 import { BsCart } from "react-icons/bs";
 
 const Header = () => {
-  const { isAuthenticated } = useSelector((state) => (state?.auth ?? false));
+  const  isAuthenticated  = useSelector((state) => (state?.auth.isAuthenticated ?? false));
   const dispatch = useDispatch();
   const count = useSelector((state)=> state?.cartSl?.cart?.medicines.length  || 0)
   console.log(count);
   
   const location = useLocation()
 
+  const navigate = useNavigate()
+
   const handleLogout = async () => {
     try {
       const res = await instance.get("/logout", { withCredentials: true });
       if (res.data.success) {
+        navigate('/')
+        dispatch(logout())
         toast.success("You have been logged out");
-        dispatch(logout());
       } else {
-        toast.error("Logout Failed");
+        throw new Error(res.data.message)
       }
     } catch (error) {
-      toast.error("Logout Failed");
+      toast.error(error.message || "Logout Failed");
     }
   };
 
 
-  // Authenticated menu items for small screens using Nav
   const authNavItemsSmallScreen = (
     <Nav>
       <Nav.Link as={Link} to="/myProfile">
@@ -39,7 +41,7 @@ const Header = () => {
       <Nav.Link as={Link} to="/myAppointments">
         My Appointments
       </Nav.Link>
-      <Nav.Link as={Link} to="/previousMedicineOrders">
+      <Nav.Link as={Link} to="/orderHistory">
         Previous Medicine Orders
       </Nav.Link>
       <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
@@ -63,8 +65,8 @@ const Header = () => {
 
                 <Nav.Link 
                   as={Link} 
-                  to="/adminPanel" 
-                  className={location.pathname.startsWith("/adminPanel") ? "active-nav" : ""}
+                  to="/aboutUs" 
+                  className={location.pathname.startsWith("/aboutUs") ? "active-nav" : ""}
                 >
                   About Us <hr className="hr-under-navs" />
                 </Nav.Link>
@@ -84,6 +86,7 @@ const Header = () => {
                 >
                   Medicines <hr className="hr-under-navs" />
                 </Nav.Link>
+                
 
           </Nav>
           <Nav className="me-3">
@@ -106,12 +109,12 @@ const Header = () => {
                       alt="User Avatar"
                       width="35"
                       height="35"
-                      className="profile-circle-navbar"
+                      className="profile-circle-navbar p-0"
                     />
                   }
                   id="user-nav-dropdown"
                   align="end"
-                  
+                  className="p-0"
                 >
                   <NavDropdown.Item as={Link} to="/myProfile">
                     My Profile
@@ -119,7 +122,7 @@ const Header = () => {
                   <NavDropdown.Item as={Link} to="/myAppointments">
                     My Appointments
                   </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/previousMedicineOrders">
+                  <NavDropdown.Item as={Link} to="/orderHistory">
                     Previous Medicine Orders
                   </NavDropdown.Item>
                   <NavDropdown.Divider />

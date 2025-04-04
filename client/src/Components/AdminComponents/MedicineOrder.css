@@ -1,0 +1,125 @@
+.modern-modal {
+  .modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  }
+}
+
+.bg-light-100 { background-color: #f8f9fa; }
+.bg-light-200 { background-color: #e9ecef; }
+
+.fw-600 { font-weight: 600; }
+.fw-800 { font-weight: 800; }
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-shipped, .status-delivered {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+
+.text-primary-dark { color: #2c3e50; }
+
+.shadow-xs-hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+}
+
+.cursor-pointer { cursor: pointer; }
+
+
+
+
+.status-icon-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: inherit;
+}
+
+.status-dropdown-menu {
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 769px) and (max-width: 1090px) {
+  .card-header .row > div {
+    flex: 0 0 33%;
+    max-width: 33%;
+  }
+
+  .status-dropdown-toggle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dropdown-toggle::after {
+    position: absolute;
+    right: 8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .medicine-orders-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .card-header .row > div {
+    flex: 0 0 50%;
+    max-width: 50%;
+    margin-bottom: 8px;
+  }
+
+  .card-header .row > div:last-child {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  .card-header {
+    padding: 12px;
+  }
+
+  .dropdown-toggle {
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}

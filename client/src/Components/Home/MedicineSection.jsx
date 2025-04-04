@@ -14,29 +14,36 @@ const MedicineSection = () => {
       
       console.log(medicineForms);
         return (
-    <Container className="medicine-Section">
-            <Row className="justify-content-center text-center flex-column align-content-center">
-                <Col md={6}>
-                <h1>Find Medicines by Form</h1>
-            <p>Select from Tablets, Capsules, Syrups, and more to get the right medicine, easily.</p>
-            </Col>
-                <Col md={6} className="d-flex pt-4 px-0 gap-4 justify-content-center align-content-center">
-                
-            {medicineForms.map((item)=>(
-                <Link to={`/medicineList/${item.name}`} className="medicine-links">
-                    <div className="medicine-types text-center">
-                    
-                    <img src={item.img} alt={item.name} className="" />
-                    <p className="mt-2 mb-0">{item.name}</p>
-                    
-                </div>
-                </Link>
-            ))}
-            </Col>
-
+            <Container className="medicine-Section">
+            <Row className="justify-content-center text-center">
+                <Col lg={8} md={10}>
+                    <h1>Find Medicines by Form</h1>
+                    <p>Select from Tablets, Capsules, Syrups, and more to get the right medicine, easily.</p>
+                </Col>
             </Row>
-            
-    </Container>
+            <Row className="justify-content-center g-4 pt-4">
+                {medicineForms.map((item, index) => (
+                    <Col 
+                        key={index}
+                        xs={6}
+                        sm={4}
+                        md={3}
+                        lg={2}
+                        className="d-flex justify-content-center"
+                    >
+                        <Link 
+                            to={`/medicineList/${item.name}`} 
+                            className="medicine-links"
+                        >
+                            <div className="medicine-types text-center">
+                                <img src={item.img} alt={item.name} />
+                                <p className="mt-2 mb-0">{item.name}</p>
+                            </div>
+                        </Link>
+                    </Col>
+                ))}
+            </Row>
+        </Container>
   )
 };
 

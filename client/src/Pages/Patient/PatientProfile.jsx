@@ -14,7 +14,7 @@ const PatientProfile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const user = useSelector((state) => state?.auth?.user ?? {});
+  const user = useSelector((state) => state?.auth?.user?? {});
   const pid = user.id;
 
   useEffect(() => {
@@ -37,10 +37,12 @@ const PatientProfile = () => {
     if (pid) {
       fetchProfile();
     }
-  }, [pid]);
+  }, [user]);
 
   const userDetails = profileData.userId || {};
 
+  console.log(profileData);
+  
   
   const dateOfBirth = userDetails.dateOfBirth ? formatDateWithMoment(userDetails.dateOfBirth) : "";
 

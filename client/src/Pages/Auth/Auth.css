@@ -1,64 +1,118 @@
-.register-container {
+/* Auth.css */
+.auth-container {
   min-height: 100vh;
-  background-color: #EAF6F6;
+  background-color: rgb(95, 111, 255);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem;
 }
 
-.register-wrapper {
+.auth-wrapper {
   width: 100%;
   max-width: 1200px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.register-image-section {
-  background-color: #D4F1F4;
+.auth-image-section {
+  background-color: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 2rem;
 }
 
-.register-form-section {
-  padding: 40px;
-}
-.register-form .row{
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-
-.register-form label{
-  font-weight: 600;
-
-}
-
-.register-container-2 {
+.auth-form-section {
+  padding: 3rem;
   background: white;
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.register-title {
-  font-size: 24px;
-  font-weight: bold;
+.auth-title {
+  color: rgb(95, 111, 255);
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.register-btn {
-  background-color: #008060;
+.auth-form .form-group {
+  margin-bottom: 1.2rem;
+}
+
+.auth-form label {
+  font-weight: 600;
+  color: #444;
+}
+
+.auth-form .form-control {
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.auth-form .form-control:focus {
+  border-color: rgb(95, 111, 255);
+  box-shadow: 0 0 0 0.2rem rgba(95, 111, 255, 0.25);
+}
+
+.auth-btn {
+  background-color: rgb(95, 111, 255);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 8px;
   border: none;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
-.register-btn:hover {
-  background-color: #006c50;
+.auth-btn:hover {
+  background-color: rgba(95, 111, 255, 0.9);
+  transform: scale(1.02);
 }
 
-@media (max-width: 991px) {
-  .register-image-section {
+.auth-link {
+  color: #666;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.auth-link a {
+  color: rgb(95, 111, 255);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875em;
+}
+
+.lottie-container {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 1rem;
+  }
+  
+  .auth-form-section {
+    padding: 2rem;
+  }
+  
+  .auth-title {
+    font-size: 1.75rem;
+  }
+  
+  .auth-image-section {
     display: none;
   }
-}
-
-.login-form .form-group{
-  margin-top: 10px;
 }

@@ -1,5 +1,4 @@
 import moment from "moment";
-import { string } from "yup";
 
 export const formatDateWithMoment = (dateString) => {
   if (!dateString) return "";
@@ -12,3 +11,17 @@ export const dateConvert = (isoString)=>{
   
   return moment(isoString).format("YYYY-MM-DD") 
 }
+
+export const convertISODate = (string)=>{
+  if(!string) return "";
+  return moment(string).format("DD-MMMM-YYYY")
+}
+
+
+export const isToday = (dateString) => {
+  const date = new Date(dateString);
+  const today = new Date();
+  return date.getDate() === today.getDate() &&
+         date.getMonth() === today.getMonth() &&
+         date.getFullYear() === today.getFullYear();
+};

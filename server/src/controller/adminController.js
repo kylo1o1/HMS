@@ -91,7 +91,7 @@ exports.addDoctor = async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const newUser = await User.create([{ name, email, password: hashedPassword, dateOfBirth, gender, role, contact }], { session });
+    const newUser = await User.create([{ name, email, password: hashedPassword, dateOfBirth, gender, role, contact }]);
 
     const savedUser = newUser[0];
 
@@ -105,7 +105,7 @@ exports.addDoctor = async (req, res) => {
       doctorData.docPicture = req.file.path;
     }
 
-    const newDoctor = await Doctor.create([doctorData], { session });
+    const newDoctor = await Doctor.create([doctorData]);
 
     await session.commitTransaction();
     await sendLoginInfo(email, password);
@@ -280,9 +280,12 @@ exports.viewDoctors = async (req, res) => {
       });
     }
 
+    const noOfDoctors = doctors.length
+
     return res.status(200).json({
       success: true,
       doctors,
+      noOfDoctors
     });
   } catch (error) {
     console.error("Error Fetching Doctors :", error.message);
@@ -298,6 +301,8 @@ exports.viewPatients = async (req, res) => {
   try {
     const patients = await Patient.find().populate("userId", "-password");
 
+    const noOfPatients = patients.length
+
     if (!patients || patients.length === 0) {
       return res.status(404).json({
         success: false,
@@ -308,6 +313,7 @@ exports.viewPatients = async (req, res) => {
     return res.status(200).json({
       success: true,
       patients,
+      noOfPatients
     });
   } catch (error) {
     console.error("Error Fetching Patients :", error.message);
